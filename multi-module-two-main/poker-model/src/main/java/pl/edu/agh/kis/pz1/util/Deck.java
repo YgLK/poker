@@ -17,7 +17,7 @@ public class Deck {
      *
      * Cards in the Deck are initially sorted.
      */
-    Deck(){
+    public Deck(){
         cards = new ArrayList<>();
         // initially deck is sorted
         for(Rank r : Rank.values()){
