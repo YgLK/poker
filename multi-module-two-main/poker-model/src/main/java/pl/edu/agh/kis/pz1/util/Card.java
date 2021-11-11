@@ -12,7 +12,7 @@ public class Card {
     private Rank cardRank;
 
     /**
-     * Construct a Card class.
+     * Construct a Card.
      *
      * @param suit
      *          suit of the card
