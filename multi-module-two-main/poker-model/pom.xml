@@ -52,6 +52,15 @@
             <version>${project.version}</version>
         </dependency>
 
+
+<!--    don't add that beceause of circular dependency -->
+<!--        <dependency>-->
+<!--            <groupId>pl.edu.agh.kis.pz1</groupId>-->
+<!--            <artifactId>poker-server</artifactId>-->
+<!--            <version>${project.version}</version>-->
+<!--        </dependency>-->
+
+
     </dependencies>
 
 </project>
