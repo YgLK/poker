@@ -40,6 +40,10 @@ public class Card {
         return cardRank;
     }
 
+    public String getCardStr(){
+        return " [" + this.getCardRank() + " " + this.getCardSuit() + "] ";
+    }
+
     @Override
     public boolean equals(Object o){
         if (this == o) return true;

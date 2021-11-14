@@ -63,4 +63,8 @@ public class Deck {
         cards.remove(idx);
     }
 
+    public void addCard(Card c){
+        cards.add(c);
+    }
+
 }
