@@ -11,29 +11,37 @@ public class Client {
     String nickname = "";
 
     Client(){
-        System.out.println("Enter your nickname:");
+        // set nickname
+        System.out.print("Enter your nickname: ");
         Scanner sc = new Scanner(System.in);
         nickname = sc.nextLine();
     }
 
     public void joinServer() throws IOException {
+        // set hostname and port to which client will be joining
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
 
         System.out.println("Client started.");
         try (
+                // initialize needed data
                 Socket socket = new Socket(HOST, PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 Scanner in = new Scanner(socket.getInputStream());
                 Scanner s = new Scanner(System.in);
         ) {
+            out.println(nickname); // pass nickname to the server
             while (true) {
-                System.out.print("Input: ");
+                // get input from Client
+                System.out.print(nickname + " - Input: ");
                 String input = s.nextLine();
+                // pass input to the server
                 out.println(input);
                 if (input.equalsIgnoreCase("exit")) break;
 //                System.out.println("Echoed from server: " );
-                System.out.println(in.nextLine());
+                if(in.hasNextLine()){
+                    System.out.println(in.nextLine());
+                }
             }
         }
     }
