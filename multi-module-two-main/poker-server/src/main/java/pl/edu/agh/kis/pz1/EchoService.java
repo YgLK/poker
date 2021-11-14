@@ -16,18 +16,16 @@ public class EchoService extends Thread {
     private PrintWriter outPrint;
     private Scanner inScanner;
 
-    private Player player;
-
-
     public EchoService(Socket acceptedSocket) {
         try {
+            // initialize needed data
             this.acceptedSocket = acceptedSocket;
             is = new DataInputStream(acceptedSocket.getInputStream());
             os = new DataOutputStream(acceptedSocket.getOutputStream());
             outPrint = new PrintWriter(acceptedSocket.getOutputStream(), true);
             inScanner = new Scanner(acceptedSocket.getInputStream());
 
-            player = new Player("client_nickname");
+//            player = new Player("client_nickname");
         } catch (IOException e) {
             try {
                 if (this.acceptedSocket != null)
@@ -50,30 +48,64 @@ public class EchoService extends Thread {
                 PrintWriter out = this.getOutPrintWriter();
                 Scanner in = this.getInScanner();
         ){
-//            while (in.hasNextLine()) {
+            String nickname = in.nextLine(); // get nickname from the client
+            System.out.println(nickname + " has joined to the server.");
+            ClientIdentifiers.addClient(this, new Player(nickname)); // test add Client to the hashmap
             while(true) {
-                is = new DataInputStream(acceptedSocket.getInputStream());
-                os = new DataOutputStream(acceptedSocket.getOutputStream());
-
+                // get input from client
                 String input = in.nextLine();
+
+                // check if input equals to "exit", if it is simply client exits
                 if (input.equalsIgnoreCase("exit")) {
-//                    numPlayers--;
+                    // remove client from the players
+                    Server.numPlayers--;
+                    ClientIdentifiers.removeClient(this);
                     break;
                 }
-//                System.out.println("Number of players: " + numPlayers);
+
+                // print number of players
+                System.out.println("Number of players: " + Server.numPlayers);
+                // print message received from client
                 System.out.println("Received message from client: " + input);
+
+                // check if user sent commands to deal cards or show cards
                 if (input.equalsIgnoreCase("deal cards")) {
-                    player.dealCards();
-                    out.println("Cards has been dealt.");
+                    // deal Cards for a player which is associated with this EchoService
+                    ClientIdentifiers.getPlayers().get(this).dealCards();
+                    out.println("Cards have been dealt.");
                 } else if (input.equalsIgnoreCase("show cards")) {
-//                    numPlayers--;
-                    player.printCards(out);
-                } else {
+                    ClientIdentifiers.getPlayers().get(this).printCards(out);
+                } else if (input.toLowerCase().contains("exchange cards")) {
+//                    out.println("Choose Cards to exchange (indexes separated by space): ");
+
+                    // get substring after 'exchange cards '
+                    // i.e. 'exchange cards 1 3 4'
+                    // which will give idxs = '1 3 4'
+                    String idxs = input.substring(15);
+
+                    // TODO: fix reading string from input error (it just loops infinitely)
+                    // String idxs = in.nextLine();
+
+                    // UPDATE: I changed method of passing idxes to exchange, but it would be good if it works
+
+//                    String idxs = "0 3 1";  // test - works fine with string
+                    ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
+                } else if (input.equalsIgnoreCase("players")) {
+                    // print clients nicknames
+                    ClientIdentifiers.printPlayers(out);
+                }else if (input.equalsIgnoreCase("instructions")) {
+                    // print commands and instructions for poker game
+                    // TODO: make it print as whole not separated by lines (i need to press ENTER after the
+                    //  first printed line and then second one appears which is inconvenient
+                    //  and it breaks whole printing system - after command i need to click ENTER
+                    //  couple times until i get wanted result)
+                    out.println("INSTRUKCJA");
+                    out.println("\'show cards\' - prints all cards on your hand ");
+                } // if not just print what client said
+                else {
                     out.println("You said:" + input);
                 }
             }
-        }catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
