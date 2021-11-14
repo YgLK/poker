@@ -27,6 +27,13 @@ public class Deck {
         }
     }
 
+    // get first card from the deck
+    public Card getCard(){
+        Card c = cards.get(0);
+        cards.remove(0);
+        return c;
+    }
+
     public ArrayList<Card> getCards() {
         return cards;
     }
@@ -50,6 +57,10 @@ public class Deck {
         for (Card c : cards) {
             System.out.println(c.getCardRank() + " " + c.getCardSuit());
         }
+    }
+
+    public void removeCard(int idx){
+        cards.remove(idx);
     }
 
 }
