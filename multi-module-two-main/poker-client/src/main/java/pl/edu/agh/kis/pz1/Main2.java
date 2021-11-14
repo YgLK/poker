@@ -3,7 +3,10 @@ package pl.edu.agh.kis.pz1;
 import pl.edu.agh.kis.pz1.util.TextUtils;
 import pl.edu.agh.kis.pz1.util.Deck;
 import pl.edu.agh.kis.pz1.util.Card;
+import pl.edu.agh.kis.pz1.Client;
 
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +18,23 @@ import java.util.Map;
  */
 public class Main2 {
     public static void main( String[] args ) {
-        System.out.println( "Szablon projektu z dwiem metodami main i zależnościami wbudowanymi w wykonywalny jar" );
-        //wywołanie metody generującej hash SHA-512
-        System.out.println("HASH 512 dla słowa test: " + TextUtils.sha512Hash("test"));
+//        System.out.println( "Szablon projektu z dwiem metodami main i zależnościami wbudowanymi w wykonywalny jar" );
+//        //wywołanie metody generującej hash SHA-512
+//        System.out.println("HASH 512 dla słowa test: " + TextUtils.sha512Hash("test"));
 
-        cardsTest();
+//        cardsTest();
+        Client client1 = new Client();
+        try {
+            client1.joinServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+
+
+
+
 
     public static void cardsTest() {
         int players_count = 4, card_count = 5;
