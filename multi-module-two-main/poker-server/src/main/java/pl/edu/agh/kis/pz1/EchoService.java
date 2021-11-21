@@ -47,6 +47,8 @@ public class EchoService extends Thread {
             System.out.println(nickname + " has joined to the server.");
             // add Client to the hashmap
             ClientIdentifiers.addClient(this, new Player(nickname));
+            // add player to queue
+            PlayerQueue.queue.add(this);
             while(true) {
                 // get input from client
                 String input = in.nextLine();
@@ -65,47 +67,66 @@ public class EchoService extends Thread {
 
                 // check if user sent commands to deal cards or show cards
                 if (input.equalsIgnoreCase("deal cards")) {
-                    // deal Cards for a player which is associated with this EchoService
-                    ClientIdentifiers.getPlayers().get(this).dealCards();
-                    out.println("Cards have been dealt.");
+                    // check if it's your turn
+                    if(isMyTurn()){
+                        // deal Cards for a player which is associated with this EchoService
+                        ClientIdentifiers.getPlayers().get(this).dealCards();
+                        out.println("Cards have been dealt.");
+                        PlayerQueue.nextPlayer();
+                    } else {
+                        out.println("It's not your turn! [Type 'queue' to show players order]");
+                    }
                 } else if (input.equalsIgnoreCase("show cards")) {
                     ClientIdentifiers.getPlayers().get(this).printCards(out);
                 } else if (input.toLowerCase().contains("exchange cards")) {
-//                    out.println("Choose Cards to exchange (indexes separated by space): ");
-
-                    // get substring after 'exchange cards '
-                    // i.e. 'exchange cards 1 3 4'
-                    // which will give idxs = '1 3 4'
-                    String idxs = input.substring(15);
-
-                    // TODO: fix reading string from input error (it just loops infinitely)
-                    // String idxs = in.nextLine();
-
-                    // UPDATE: I changed method of passing idxes to exchange, but it would be good if it works
-
-//                    String idxs = "0 3 1";  // test - works fine with string
-                    ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
+                    // check if it's your turn
+                    if(isMyTurn()){
+                        // get substring after 'exchange cards '
+                        // i.e. 'exchange cards 1 3 4'
+                        // which will give idxs = '1 3 4'
+                        String idxs = input.substring(15);
+                        //  -- just lets leave it as it is --
+                        // it will be exchange cards _ _ _ , where _ is card_idx
+                        ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
+                        PlayerQueue.nextPlayer();
+                    } else {
+                        out.println("It's not your turn! [Type 'queue' to show players order]");
+                    }
                 } else if (input.equalsIgnoreCase("players")) {
                     // print clients nicknames
                     ClientIdentifiers.printPlayers(out);
                 }else if (input.equalsIgnoreCase("instructions")) {
                     // print commands and instructions for poker game
-                    // TODO: make it print as whole not separated by lines (i need to press ENTER after the
-                    //  first printed line and then second one appears which is inconvenient
-                    //  and it breaks whole printing system - after command i need to click ENTER
-                    //  couple times until i get wanted result)
-
-                    // z \n nie działa ;/ - writeLine() sie blokuje
-                    out.println("INSTRUKCJA" + "\n" + " \'show cards\' - prints all cards on your hand ");
+                    out.println("INSTRUKCJA\n" +
+                            " \'show cards\' - prints all cards on your hand");
+                    out.println("-1");
                 }  else if (input.equalsIgnoreCase("evaluate hand")) {
-                    // evaluate points (they will be used to check who won the game)
-                    ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
-                    out.println(ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
-                            + ClientIdentifiers.getPlayers().get(this).getGamePoints());
+                        // evaluate points (they will be used to check who won the game)
+                        ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
+                        out.println(ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
+                                + ClientIdentifiers.getPlayers().get(this).getGamePoints());
+                        PlayerQueue.nextPlayer();
+                } else if (input.equalsIgnoreCase("queue")) {
+                    // communicate that it's your turn
+                    if(isMyTurn()){
+                        out.println("Your turn.");
+                    } else {
+                        // evaluate points (they will be used to check who won the game)
+                        out.println(PlayerQueue.strQueue());
+                    }
                 }
-                // if not just print what client said
+//                else if (input.equalsIgnoreCase("pass")) {
+//                    // NOT FINISHED YET (client after pass doesnt respond)
+//
+//                    if(isMyTurn()){
+//                        PlayerQueue.passPlayer();
+//                    } else {
+//                        out.println("It's not your turn! [Type 'queue' to show players order]");
+//                    }
+//                }
+                // if not just print return what client typed as unknown command
                 else {
-                    out.println("You said:" + input);
+                    out.println("Unknown command: " + input);
                 }
             }
         }
@@ -129,5 +150,9 @@ public class EchoService extends Thread {
 
     public Scanner getInScanner() {
         return inScanner;
+    }
+
+    public boolean isMyTurn(){
+        return PlayerQueue.queue.peek() == this;
     }
 }
