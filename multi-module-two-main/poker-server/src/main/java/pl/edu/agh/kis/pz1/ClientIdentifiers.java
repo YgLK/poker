@@ -15,6 +15,10 @@ public class ClientIdentifiers {
         return players;
     }
 
+    public static Player getPlayer(EchoService e){
+        return players.get(e);
+    }
+
     // add client to the players
     public static void addClient(EchoService es, Player pl) {
         ClientIdentifiers.players.put(es, pl);
