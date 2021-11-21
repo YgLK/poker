@@ -44,6 +44,14 @@ public class Card {
         return " [" + this.getCardRank() + " " + this.getCardSuit() + "] ";
     }
 
+    public boolean isCardSuitEqual(Suit suit){
+        return this.getCardSuit() == suit;
+    }
+
+    public boolean isCardRankEqual(Rank rank){
+        return this.getCardRank() == rank;
+    }
+
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
