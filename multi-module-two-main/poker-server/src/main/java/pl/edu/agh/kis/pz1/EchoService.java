@@ -2,16 +2,14 @@ package pl.edu.agh.kis.pz1;
 
 import pl.edu.agh.kis.pz1.util.Player;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
 public class EchoService extends Thread {
     private Socket acceptedSocket;
-    private DataInputStream is;
+//    private DataInputStream is;
+    private BufferedReader is;
     private DataOutputStream os;
     private PrintWriter outPrint;
     private Scanner inScanner;
@@ -20,12 +18,10 @@ public class EchoService extends Thread {
         try {
             // initialize needed data
             this.acceptedSocket = acceptedSocket;
-            is = new DataInputStream(acceptedSocket.getInputStream());
+            is = new BufferedReader(new InputStreamReader(acceptedSocket.getInputStream()));
             os = new DataOutputStream(acceptedSocket.getOutputStream());
             outPrint = new PrintWriter(acceptedSocket.getOutputStream(), true);
             inScanner = new Scanner(acceptedSocket.getInputStream());
-
-//            player = new Player("client_nickname");
         } catch (IOException e) {
             try {
                 if (this.acceptedSocket != null)
@@ -43,29 +39,28 @@ public class EchoService extends Thread {
     @Override
     public void run() {
         try (
-//                            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-//                            Scanner in = new Scanner(clientSocket.getInputStream());
                 PrintWriter out = this.getOutPrintWriter();
                 Scanner in = this.getInScanner();
         ){
-            String nickname = in.nextLine(); // get nickname from the client
+            // get nickname from the client
+            String nickname = in.nextLine();
             System.out.println(nickname + " has joined to the server.");
-            ClientIdentifiers.addClient(this, new Player(nickname)); // test add Client to the hashmap
+            // add Client to the hashmap
+            ClientIdentifiers.addClient(this, new Player(nickname));
             while(true) {
                 // get input from client
                 String input = in.nextLine();
 
                 // check if input equals to "exit", if it is simply client exits
                 if (input.equalsIgnoreCase("exit")) {
-                    // remove client from the players
+                    // remove client from the players group
                     Server.numPlayers--;
                     ClientIdentifiers.removeClient(this);
                     break;
                 }
-
-                // print number of players
+                // print number of players to server
                 System.out.println("Number of players: " + Server.numPlayers);
-                // print message received from client
+                // print message to server received from client
                 System.out.println("Received message from client: " + input);
 
                 // check if user sent commands to deal cards or show cards
@@ -99,9 +94,16 @@ public class EchoService extends Thread {
                     //  first printed line and then second one appears which is inconvenient
                     //  and it breaks whole printing system - after command i need to click ENTER
                     //  couple times until i get wanted result)
-                    out.println("INSTRUKCJA");
-                    out.println("\'show cards\' - prints all cards on your hand ");
-                } // if not just print what client said
+
+                    // z \n nie działa ;/ - writeLine() sie blokuje
+                    out.println("INSTRUKCJA" + "\n" + " \'show cards\' - prints all cards on your hand ");
+                }  else if (input.equalsIgnoreCase("evaluate hand")) {
+                    // evaluate points (they will be used to check who won the game)
+                    ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
+                    out.println(ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
+                            + ClientIdentifiers.getPlayers().get(this).getGamePoints());
+                }
+                // if not just print what client said
                 else {
                     out.println("You said:" + input);
                 }
@@ -109,7 +111,7 @@ public class EchoService extends Thread {
         }
     }
 
-    public DataInputStream getIs() {
+    public BufferedReader getIs() {
         return is;
     }
 
