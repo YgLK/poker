@@ -11,10 +11,12 @@ public class Player {
     int money;
     Deck pokerDeck = new Deck();
     ArrayList<Card> cards = new ArrayList<>();
+    int gamePoints;
 
     public Player(String nick){
         nickname = nick;
         money = 100;
+        gamePoints = 0;
     }
 
     public void printCards(PrintWriter out){
@@ -47,10 +49,10 @@ public class Player {
     public void exchangeCards(String cardStr, PrintWriter out){
         // when deck is empty return (it might happen when somebody want to exchange
         // cards even though cards are not dealt yet)
-//        if(cards.isEmpty()){
-//            out.println("You cannot exchange cards because you don't have any.");
-//            return;
-//        }
+        if(cards.isEmpty()){
+            out.println("You cannot exchange cards because you don't have any.");
+            return;
+        }
 
         String[] cardsIdxs = cardStr.split(" ");
         System.out.println("Idxes are splitted.");
@@ -71,6 +73,11 @@ public class Player {
         this.printCards();
     }
 
+    public void evaluatePlayerHand(){
+        gamePoints = HandEvaluator.evaluateHand(cards);
+    }
+
+
     public void getAnte(){
         money -= 5; // let's say that Ante is 5
     }
@@ -80,4 +87,8 @@ public class Player {
     }
 
     public String getNickname() {return nickname;}
+
+    public int getGamePoints(){
+        return gamePoints;
+    }
 }
