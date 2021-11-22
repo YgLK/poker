@@ -11,8 +11,8 @@ public class CardHierarchy {
                 && rankCounter.get(Rank.ACE) == 1
                 && rankCounter.get(Rank.KING) == 1
                 && rankCounter.get(Rank.QUEEN) == 1
-                && rankCounter.get(Rank.QUEEN) == 1
-                && rankCounter.get(Rank.JACK) == 1;
+                && rankCounter.get(Rank.JACK) == 1
+                && rankCounter.get(Rank.TEN) == 1;
     }
 
     public static boolean isStraightFlush(LinkedHashMap<Rank, Integer> rankCounter, LinkedHashMap<Suit, Integer> suitCounter){
