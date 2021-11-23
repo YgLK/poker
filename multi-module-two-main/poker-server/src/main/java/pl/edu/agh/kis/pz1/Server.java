@@ -6,7 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class Server {
+public class Server {                                 // MOŻNA USTAWIĆ ŻEBY SERWER STARTOWAŁ GDY np. numPlayers = 4
+                                                        // nie trzeba bedzie sie bawic wtedy z jakims ready itd.
     // number of players connected to the server
     protected static int numPlayers = 0;
 
@@ -18,19 +19,28 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(PORT);
 
         // send initialisation information about server
-        System.out.println("Server started...");
-        System.out.println("Wating for clients...");
+        System.out.println("Poker game server is up and running.");
+        System.out.println("Wating for players...");
 
         while (true) {
             PrintWriter tmp;
             // accept clientSocket to the server
             Socket clientSocket = serverSocket.accept();
             // increment count of players
-            numPlayers++;
+            incrementNumPlayers();
             // create new EchoService attached to a player
             EchoService t = new EchoService(clientSocket);
             // start EchoService
             t.start();
         }
     }
+
+    public static void incrementNumPlayers(){
+        numPlayers += 1;
+    }
+
+    public static void decrementNumPlayers(){
+        numPlayers -= 1;
+    }
+
 }

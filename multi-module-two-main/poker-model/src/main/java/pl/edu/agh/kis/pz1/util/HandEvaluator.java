@@ -31,8 +31,6 @@ public class HandEvaluator {
         }
     }
 
-    // TODO: think about card combination hierarchy and points for each combination which will be
-    //  easier to evaluate than checking every player's hand with each other
     public static int evaluateHand(ArrayList<Card> cards){
         // initialize HashMaps with default values
         initializeCounters();

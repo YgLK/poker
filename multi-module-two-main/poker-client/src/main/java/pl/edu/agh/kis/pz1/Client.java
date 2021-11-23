@@ -22,7 +22,7 @@ public class Client {
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
 
-        System.out.println("Client started.");
+        System.out.println("Welcome to the Poker game room.");
         try (
                 // initialize needed data
                 Socket socket = new Socket(HOST, PORT);
@@ -42,6 +42,13 @@ public class Client {
                 if(in.hasNextLine()){
                     System.out.println(in.nextLine());
                 }
+                // code below doesnt work because while never ends
+                // but it's close to achieve the goal to print multiple lines at once to client
+//                while(in.hasNextLine()){
+//                    System.out.println(in.nextLine());
+//                    if(input.equals("exit"))
+//                        break;
+//                }
             }
         }
     }

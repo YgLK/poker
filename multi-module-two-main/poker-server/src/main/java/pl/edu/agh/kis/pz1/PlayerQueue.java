@@ -14,14 +14,13 @@ public class PlayerQueue {
         }
         return String.valueOf(strQueue);
     }
+        // sometimes when its 2 players queue doesn't change order after turn
 
     // takes first player from the queue to the end of the queue after his turn
     public static void nextPlayer() {
         EchoService e  = PlayerQueue.queue.getFirst();
         PlayerQueue.queue.addLast(e);
-        if(!PlayerQueue.queue.isEmpty()){
-            PlayerQueue.queue.removeFirst();
-        }
+        PlayerQueue.queue.removeFirst();
     }
 
     // something doesn't work here atm

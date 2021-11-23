@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Player {
     String nickname;
     int money;
+    boolean hasPassed;
     Deck pokerDeck = new Deck();
     ArrayList<Card> cards = new ArrayList<>();
     int gamePoints;
@@ -17,6 +18,7 @@ public class Player {
         nickname = nick;
         money = 100;
         gamePoints = 0;
+        hasPassed = false;
     }
 
     public void printCards(PrintWriter out){
@@ -90,5 +92,32 @@ public class Player {
 
     public int getGamePoints(){
         return gamePoints;
+    }
+
+    public static class Bidding {
+        int firstBid;
+        int secondBid;
+        // ante kazdy wpłaca - to mozna na serwerze bezposrednio
+        // rozdajemy karty
+        // licytacja 1
+        // wymiana kart
+        // licytacja kart 2
+        // ocena kart i wygrywa osoba z najwyzszym wynikiem
+
+        public void setFirstBid(int value){
+            firstBid = value;
+        }
+
+        public void setSecondBid(int value){
+            secondBid = value;
+        }
+
+        public int getfirstBid(){
+         return firstBid;
+        }
+
+        public int getSecondBid(){
+            return secondBid;
+        }
     }
 }
