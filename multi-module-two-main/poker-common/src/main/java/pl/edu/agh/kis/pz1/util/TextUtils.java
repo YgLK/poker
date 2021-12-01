@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class TextUtils {
 
+    private TextUtils(){}
 
     public static String sha512Hash(String str) {
         return DigestUtils.sha512Hex(str);
@@ -43,7 +44,5 @@ public class TextUtils {
     public static String generateHash(String str) {
         return DigestUtils.sha512Hex(str);
     }
-
-
 
 }
