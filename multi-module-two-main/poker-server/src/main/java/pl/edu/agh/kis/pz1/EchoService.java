@@ -1,5 +1,7 @@
 package pl.edu.agh.kis.pz1;
 
+import pl.edu.agh.kis.pz1.util.Bet;
+import pl.edu.agh.kis.pz1.util.Gameplay;
 import pl.edu.agh.kis.pz1.util.Player;
 
 import java.io.*;
@@ -9,7 +11,6 @@ import java.util.Scanner;
 
 public class EchoService extends Thread {
     private Socket acceptedSocket;
-//    private DataInputStream is;
     private BufferedReader is;
     private DataOutputStream os;
     private PrintWriter outPrint;
@@ -20,6 +21,7 @@ public class EchoService extends Thread {
         commandList = new ArrayList<>();
         commandList.add("exit");
         commandList.add("deal cards");
+        commandList.add("get cards");
         commandList.add("show cards");
         commandList.add("exchange cards");
         commandList.add("players");
@@ -27,6 +29,8 @@ public class EchoService extends Thread {
         commandList.add("queue");
         commandList.add("balance");
         commandList.add("fold");
+        commandList.add("bet");
+        commandList.add("phase");
 
         try {
             // initialize needed data
@@ -66,54 +70,156 @@ public class EchoService extends Thread {
 
             // print number of players to server
             System.out.println("Number of players: " + Server.numPlayers);
+            // pay Ante
+            ClientIdentifiers.getPlayer(this).payAnte();
+            String input = "";
             while(true) {
+                System.out.println("Phase" + Gameplay.getGamePhase());
                 // get input from client
-                String input = in.nextLine();
+                input = in.nextLine();
 
                 // print message to server received from client
-                System.out.println(strServerLog(nickname, input));
-
+                strServerLog(nickname, input);
                 // check if input equals to "exit", if it is simply client exits
                 if (input.equalsIgnoreCase("exit")) {
                     exitServer(nickname);
                     break;
                 }
 
-                // check if user sent commands to deal cards or show cards
-                if (input.equalsIgnoreCase("deal cards")) {
-                    dealCards(out);
-                } else if (input.equalsIgnoreCase("show cards")) {
-                    ClientIdentifiers.getPlayers().get(this).printCards(out);
-                } else if (input.toLowerCase().contains("exchange cards")) {
-                    cardsExchange(input, out);
-                } else if (input.equalsIgnoreCase("players")) {
-                    // print clients nicknames
-                    ClientIdentifiers.printPlayers(out);
-                }else if (input.equalsIgnoreCase("instructions")) {
-                    // print commands and instructions for poker game
-                    // jesli zadziala printowanie wielu linii to po prostu linia za linią bedzie printowane co co oznacza i jak sie gra
-                    out.println(strGetInstructions());
-                }  else if (input.equalsIgnoreCase("evaluate hand")) {
-                        // evaluate points (they will be used to check who won the game)
-                        evaluateMyHand();
-                        out.println(strGetHandValue());
-                        PlayerQueue.nextPlayer();
-                } else if (input.equalsIgnoreCase("queue")) {
-                    out.println(strGetQueue());
-                } else if (input.equalsIgnoreCase("balance")){
-                    out.println(strGetBalance());
-                } else if (input.equalsIgnoreCase("fold")) {
-                    // TODO: implement
-                } else if (input.toLowerCase().contains("bid")){
-                    // TODO: implement
-                } else {
-                    // if not just print return what client typed as unknown command
-                    out.println("Unknown command: " + input);
+                // get gamePhase from Gameplay class
+                int gamePhase = Gameplay.getGamePhase();
+
+                // recognize commands depending on the actual game phase
+                if(gamePhase == 1){
+                    firstPhase(input, out);
+                } else if (gamePhase == 2 || gamePhase == 4){
+                    secondFourthPhase(input, out);
+                } else if (gamePhase == 3){
+                    thirdPhase(input, out);
+                } else if (gamePhase == 5){
+                    fifthPhase(input, out);
                 }
             }
         }
     }
 
+    // this works fine
+    public void firstPhase(String input, PrintWriter out){
+        if (input.equalsIgnoreCase("deal cards")
+                || input.equalsIgnoreCase("get cards")) {
+            // call dealCards if true it is accomplished successfully and add player to the passPhase1 set
+            if(dealCards(out)){
+                Gameplay.passPhase1(ClientIdentifiers.getPlayer(this));
+            }
+        } else {
+            otherCommands(input, out);
+        }
+    }
+
+    // let's check this one
+    // TODO: check betting (gamephase equals 2 now becuase of tests #nvm i changed it back to 1 before sleep)
+    // gamephase doesnt increment to 3 after 2 bets, so it needs to be checked
+    public void secondFourthPhase(String input, PrintWriter out){
+        int gamePhase = Gameplay.getGamePhase();
+        if (input.toLowerCase().contains("bet") && input.length() > 4){
+            if(isMyTurn()){
+                int value = Integer.parseInt(input.replaceAll("[^0-9]+", "")),
+                        maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys()),
+                        maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
+                System.out.println(value);
+                if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
+                    ClientIdentifiers.getPlayer(this).setBid(value);
+                    if(gamePhase == 2){
+                        Gameplay.passPhase2(ClientIdentifiers.getPlayer(this));
+                    } else {
+                        Gameplay.passPhase4(ClientIdentifiers.getPlayer(this));
+                    }
+                    PlayerQueue.nextPlayer();
+                    out.println("Bet of value " + value + " has been placed.");
+                // to this place it works
+                } else if(Gameplay.getGamePhase() == 2){
+                    out.println("Value should be higher or equal to " + maxFirstBet);
+                }else if(Gameplay.getGamePhase() == 4){
+                    out.println("Value should be higher or equal to " + maxFirstBet);
+                }else{
+                    out.println("It's not bet phase!");
+                }
+            } else if(!isMyTurn()){
+                out.println("It's not your turn! [Type 'queue' to show players order]");
+            } else {
+                int actualBid = 0;
+                if(Gameplay.getGamePhase() == 2){
+                    actualBid = ClientIdentifiers.getPlayer(this).getfirstBid();
+                } else if(Gameplay.getGamePhase() == 4){
+                    actualBid = ClientIdentifiers.getPlayer(this).getSecondBid();
+                }
+                out.println("You stay with your previous bid - " + actualBid);
+            }
+        } else {
+            otherCommands(input, out);
+        }
+    }
+
+    // this should work fine
+    public void thirdPhase(String input, PrintWriter out){
+        if (input.toLowerCase().contains("exchange cards")) {
+            if(cardsExchange(input, out)){
+                Gameplay.passPhase3(ClientIdentifiers.getPlayer(this));
+            }
+        } else {
+            otherCommands(input, out);
+        }
+    }
+
+    public void fifthPhase(String input, PrintWriter out){
+        Gameplay.setWinner(Gameplay.pickWinner());
+        if (input.toLowerCase().contains("restart game")){
+            restartGame(out);
+        } else {
+            otherCommands(input, out);
+        }
+    }
+
+    public void otherCommands(String input, PrintWriter out){
+        if (input.equalsIgnoreCase("show cards")) {
+            ClientIdentifiers.getPlayers().get(this).printCards(out);
+        } else if (input.equalsIgnoreCase("players")) {
+            // print clients nicknames
+            ClientIdentifiers.printPlayers(out);
+        }  else if (input.equalsIgnoreCase("evaluate hand")) {
+            // evaluate points (they will be used to check who won the game)
+            evaluateMyHand();
+            out.println(strGetHandValue());
+            PlayerQueue.nextPlayer();
+        } else if (input.equalsIgnoreCase("queue")) {
+            out.println(strGetQueue());
+        } else if (input.equalsIgnoreCase("balance")){
+            out.println(strGetBalance());
+        }else if (input.equalsIgnoreCase("bid status")){
+            out.println("Your actual bet: " + getActualBetValue() + ". Actual highest equals " + getMaxBet());
+        } else if(input.toLowerCase().contains("phase")){
+            out.println(Gameplay.strGamePhase());
+        } else if(input.toLowerCase().contains("winner")){
+             if(Gameplay.getWinner() == null){
+                 out.println("Winner hasn't been established yet.");
+             } else {
+                 out.println("The winner -> " + Gameplay.getWinner().getNickname() + " with " + Gameplay.getWinner().getGamePoints() + " points!");
+             }
+        } else {
+            // if not just print return what client typed as unknown command
+            out.println("Unknown command '" + input + "' OR you're in the wrong game phase to use it.");
+        }
+    }
+
+    public int getMaxBet(){
+        if(Gameplay.getGamePhase() == 2){
+            return Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys());
+        } else if(Gameplay.getGamePhase() == 4){
+            return Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
+        } else{
+            return -1;
+        }
+    }
 
 
     public BufferedReader getIs() {
@@ -160,15 +266,27 @@ public class EchoService extends Thread {
     }
 
     public String strGetInstructions(){
-        return "For instructions type in 'man method'. Method list: ['deal cards', 'show cards' 'exchange cards', " +
+        return "For instructions type in 'man method'. Method list:" +
+                "['deal cards', 'show cards' 'exchange cards', " +
                 "'players', 'evaluate hand', 'queue', 'balance', 'fold', 'bid']";
+    }
+
+    public int getActualBetValue(){
+        int gamePhase = Gameplay.getGamePhase();
+        if(gamePhase == 2){
+            return ClientIdentifiers.getPlayer(this).getfirstBid();
+        } else if (gamePhase == 4){
+            return ClientIdentifiers.getPlayer(this).getSecondBid();
+        } else {
+            return -1;
+        }
     }
 
     public void evaluateMyHand(){
         ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
     }
 
-    public void cardsExchange(String input, PrintWriter out){
+    public boolean cardsExchange(String input, PrintWriter out){
         // check if it's your turn
         if(isMyTurn()){
             // get substring after 'exchange cards '
@@ -179,20 +297,29 @@ public class EchoService extends Thread {
             // it will be exchange cards _ _ _ , where _ is card_idx
             ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
             PlayerQueue.nextPlayer();
+            return true;
         } else {
             out.println("It's not your turn! [Type 'queue' to show players order]");
+            return false;
         }
     }
 
-    public void dealCards(PrintWriter out){
+    public void getCards(PrintWriter out){
+        ClientIdentifiers.getPlayers().get(this).dealCards();
+        ClientIdentifiers.getPlayers().get(this).printCards(out);
+    }
+
+    public boolean dealCards(PrintWriter out){
         // check if it's your turn
         if(isMyTurn()){
             // deal Cards for a player which is associated with this EchoService
             ClientIdentifiers.getPlayers().get(this).dealCards();
-            out.println("Cards have been dealt.");
+            out.println("Cards have been dealt. ['show cards' will tell you what you got]");
             PlayerQueue.nextPlayer();
+            return true;
         } else {
             out.println("It's not your turn! [Type 'queue' to show players order]");
+            return false;
         }
     }
 
@@ -210,6 +337,11 @@ public class EchoService extends Thread {
         Server.decrementNumPlayers();
         System.out.println(nickname + " - quit server");
         ClientIdentifiers.removeClient(this);
+        System.out.println("Number of players: " + Server.numPlayers);
     }
 
+    public void restartGame(PrintWriter out){
+        Gameplay.setGamePhaseToOne();
+//         restart all the things I had written into the whole game
+    }
 }
