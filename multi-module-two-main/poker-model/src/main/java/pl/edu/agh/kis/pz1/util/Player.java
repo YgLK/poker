@@ -3,22 +3,25 @@ package pl.edu.agh.kis.pz1.util;
 import jdk.internal.org.jline.utils.WriterOutputStream;
 
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Player {
+    static Deck pokerDeck = new Deck();
     String nickname;
     int money;
-    boolean hasPassed;
-    Deck pokerDeck = new Deck();
     ArrayList<Card> cards = new ArrayList<>();
     int gamePoints;
+    int firstBid=0, secondBid=0;
 
     public Player(String nick){
         nickname = nick;
         money = 100;
         gamePoints = 0;
-        hasPassed = false;
+        firstBid=0;
+        secondBid=0;
+        Gameplay.incrementPlayerCount();
     }
 
     public void printCards(PrintWriter out){
@@ -54,6 +57,9 @@ public class Player {
         if(cards.isEmpty()){
             out.println("You cannot exchange cards because you don't have any.");
             return;
+        } else if (cardStr.isEmpty()){
+            out.println("You didn't exchange any cards.");
+            return;
         }
 
         String[] cardsIdxs = cardStr.split(" ");
@@ -79,9 +85,9 @@ public class Player {
         gamePoints = HandEvaluator.evaluateHand(cards);
     }
 
-
-    public void getAnte(){
-        money -= 5; // let's say that Ante is 5
+    public void payAnte(){
+        // let's say that Ante is 5
+        money -= 5;
     }
 
     public int getMoney(){
@@ -94,9 +100,7 @@ public class Player {
         return gamePoints;
     }
 
-    public static class Bidding {
-        int firstBid;
-        int secondBid;
+
         // ante kazdy wpłaca - to mozna na serwerze bezposrednio
         // rozdajemy karty
         // licytacja 1
@@ -104,20 +108,28 @@ public class Player {
         // licytacja kart 2
         // ocena kart i wygrywa osoba z najwyzszym wynikiem
 
-        public void setFirstBid(int value){
-            firstBid = value;
-        }
+    public void setFirstBid(int value){
+        firstBid = value;
+    }
 
-        public void setSecondBid(int value){
+    public void setSecondBid(int value){
+        secondBid = value;
+    }
+
+    public int getfirstBid(){
+     return firstBid;
+    }
+
+    public int getSecondBid(){
+        return secondBid;
+    }
+
+    public void setBid(int value){
+        if(Gameplay.getGamePhase() == 2){
+            firstBid = value;
+        } else if (Gameplay.getGamePhase() == 4){
             secondBid = value;
         }
-
-        public int getfirstBid(){
-         return firstBid;
-        }
-
-        public int getSecondBid(){
-            return secondBid;
-        }
     }
+
 }
