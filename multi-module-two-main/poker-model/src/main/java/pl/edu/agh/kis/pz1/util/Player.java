@@ -132,4 +132,12 @@ public class Player {
         }
     }
 
+    public void clearPlayerData(){
+        Deck pokerDeck = new Deck();
+        money = 100;
+        cards.clear();
+        gamePoints = 0;
+        firstBid=0;
+        secondBid=0;
+    }
 }

@@ -171,10 +171,20 @@ public class EchoService extends Thread {
         }
     }
 
+    // TODO: fifth phase implement and in this restart the game
     public void fifthPhase(String input, PrintWriter out){
         Gameplay.setWinner(Gameplay.pickWinner());
-        if (input.toLowerCase().contains("restart game")){
-            restartGame(out);
+        if (input.toLowerCase().contains("restart")){
+            // add vote for restarting game
+            Gameplay.addRestartVote(ClientIdentifiers.getPlayer(this));
+            // check if all players voted for game restart, if so start next game
+            // TODO: fix Gameplay.playerCount because it says 9 when there are only 2 players
+            if(Gameplay.getRestartVotes().size() == Gameplay.getPhase1().size()){
+                out.println(Gameplay.getRestartVotes().size() + "/" + Gameplay.getPhase1().size() + " voted for rematch. New game has started!");
+                restartGame(out);
+            } else {
+                out.println(Gameplay.getRestartVotes().size() + "/" + Gameplay.getPhase1().size() + " voted for rematch.");
+            }
         } else {
             otherCommands(input, out);
         }
@@ -340,8 +350,10 @@ public class EchoService extends Thread {
         System.out.println("Number of players: " + Server.numPlayers);
     }
 
+    // TODO: restart game method implement
     public void restartGame(PrintWriter out){
-        Gameplay.setGamePhaseToOne();
+        Gameplay.clearGameplayData();
+        ClientIdentifiers.clearPlayersData();
 //         restart all the things I had written into the whole game
     }
 }

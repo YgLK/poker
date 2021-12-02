@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1.util;
 
+
 import java.util.*;
 
 
@@ -15,6 +16,7 @@ public class Gameplay {
     private static HashSet<Player> phase3 = new HashSet<>();
     private static HashMap<Player, Integer> phase4 = new HashMap<>();
     private static Player winner;
+    private static HashMap<Player, Boolean> restartVotes = new HashMap<>();
     // create hashmap with HashMap<Client, Player>
     // to have clarity which client is which player
 
@@ -152,8 +154,40 @@ public class Gameplay {
         return winner;
     }
 
+    public static Set<Player> getPhase1() {
+        return phase1;
+    }
+
+    public static HashMap<Player, Integer> getPhase2() {
+        return phase2;
+    }
+
+    public static HashSet<Player> getPhase3() {
+        return phase3;
+    }
+
+    public static HashMap<Player, Integer> getPhase4() {
+        return phase4;
+    }
+
     public static void setGamePhaseToOne(){
         gamePhase = 1;
+    }
+
+    public static void addRestartVote(Player p){
+        restartVotes.put(p, true);
+    }
+
+    public static HashMap<Player, Boolean> getRestartVotes() {
+        return restartVotes;
+    }
+
+    public static void clearGameplayData(){
+        setGamePhaseToOne();
+        phase1.clear();
+        phase2.clear();
+        phase3.clear();
+        phase4.clear();
     }
 
 }

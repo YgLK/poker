@@ -48,4 +48,10 @@ public class ClientIdentifiers {
         }
         out.println(str);
     }
+
+    public static void clearPlayersData(){
+        for(Player p : players.values()){
+            p.clearPlayerData();
+        }
+    }
 }
