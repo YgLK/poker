@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1.util;
 
+
 public enum Rank {
     ACE,
     KING,

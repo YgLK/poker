@@ -4,19 +4,15 @@ package pl.edu.agh.kis.pz1.util;
 import java.util.*;
 
 
-
 public class Gameplay {
-    // TODO: for tests i declare gamePhase with value 2 (bet code has to be tested cause shit happens)
     private static int gamePhase = 1;
-    private static int playerCount = 0;
     private static Set<Player> phase1 = new LinkedHashSet<>();
     private static HashMap<Player, Integer> phase2 = new HashMap<>();
     private static HashSet<Player> phase3 = new HashSet<>();
     private static HashMap<Player, Integer> phase4 = new HashMap<>();
     private static Player winner;
     private static HashMap<Player, Boolean> restartVotes = new HashMap<>();
-    // create hashmap with HashMap<Client, Player>
-    // to have clarity which client is which player
+
 
     Gameplay(){}
 
@@ -26,8 +22,7 @@ public class Gameplay {
     2 - first Bid
     3 - exchange cards
     4 - second Bid
-    5 - evaluate Hands and under 'leader' command there will be  winner
-        / restart game
+    5 - evaluate Hands and under 'leader' command there will be  winner / restart game
     */
 
     // group players who have taken their cards from the table
@@ -35,7 +30,6 @@ public class Gameplay {
         phase1.add(p);
         System.out.println("Phase1 size " + phase1.size()); // debug
         System.out.println("Player count " + Player.getPlayerCount()); // debug
-//        if(phase1.size() == Gameplay.getPlayerCount()){
         if(phase1.size() == Player.getPlayerCount()){
             incrementGamePhase();
         }
@@ -51,7 +45,7 @@ public class Gameplay {
         // debug
         Player lastInTheQueue = pl.get(pl.size()-1);
         // check how many unique values are there in the actual Player's bets
-        if(phase2.size() == Gameplay.getPlayerCount()){
+        if(phase2.size() == Player.getPlayerCount()){
             HashSet<Integer> uniqueValues = new HashSet<>(phase2.values());
             // I need to check if now is the first player turn
             System.out.println(uniqueValues.size()); // debug
@@ -67,7 +61,7 @@ public class Gameplay {
     // group players who have exchanged their cards
     public static void passPhase3(Player p){
         phase3.add(p);
-        if(phase3.size() == Gameplay.getPlayerCount()){
+        if(phase3.size() == Player.getPlayerCount()){
             incrementGamePhase();
         }
     }
@@ -79,7 +73,7 @@ public class Gameplay {
         // debug
         Player lastInTheQueue = pl.get(pl.size()-1);
         // check how many unique values are there in the actual Player's bets
-        if(phase4.size() == Gameplay.getPlayerCount()){
+        if(phase4.size() == Player.getPlayerCount()){
             HashSet<Integer> uniqueValues = new HashSet<>(phase4.values());
             // I need to check if now is the first player turn
             System.out.println(uniqueValues.size()); // debug
@@ -99,14 +93,6 @@ public class Gameplay {
     public static void incrementGamePhase(){
         gamePhase++;
         System.out.println("GamePhase in Increment func:" + Gameplay.getGamePhase());
-    }
-
-    public static int getPlayerCount() {
-        return playerCount;
-    }
-
-    public static void incrementPlayerCount() {
-        Gameplay.playerCount += 1;
     }
 
     public static String strGamePhase(){

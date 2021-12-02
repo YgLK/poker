@@ -33,7 +33,7 @@ public class Client {
             String input = "";
             while (true) {
                 // get input from Client
-                System.out.print(nickname + " - Input: ");
+                System.out.print(nickname + " >>  ");
                     input = s.nextLine();
                 // pass input to the server
                 out.println(input);

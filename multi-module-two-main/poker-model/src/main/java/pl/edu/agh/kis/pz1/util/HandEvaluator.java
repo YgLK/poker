@@ -10,7 +10,6 @@ public class HandEvaluator {
     private static LinkedHashMap<Suit, Integer> suitCounter = new LinkedHashMap<>();
 
 
-
     public static void initializeCounters(){
         // initialize rankCounter with 0s
         for(Rank r : Rank.values()){

@@ -5,7 +5,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.UUID;
 
 public class TextUtils {
@@ -43,7 +42,5 @@ public class TextUtils {
     public static String generateHash(String str) {
         return DigestUtils.sha512Hex(str);
     }
-
-
 
 }

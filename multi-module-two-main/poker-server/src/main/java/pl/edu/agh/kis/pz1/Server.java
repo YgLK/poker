@@ -6,10 +6,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class Server {                 // MOŻNA USTAWIĆ ŻEBY SERWER STARTOWAŁ GDY np. numPlayers = 4  // nie trzeba bedzie sie bawic wtedy z jakims ready itd.
+public class Server {
     // number of players connected to the server
     protected static int numPlayers = 0;
-    private static int gameStart = 0;
 
     // start the server
     public static void startServer() throws IOException {
@@ -21,7 +20,6 @@ public class Server {                 // MOŻNA USTAWIĆ ŻEBY SERWER STARTOWAŁ
             // send initialisation information about server
             System.out.println("Poker game server is up and running.");
             System.out.println("Wating for players...");
-            gameStart = 1;
 
             while (true) {
                 PrintWriter tmp;

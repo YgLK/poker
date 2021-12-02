@@ -1,11 +1,9 @@
 package pl.edu.agh.kis.pz1.util;
 
-import jdk.internal.org.jline.utils.WriterOutputStream;
 
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Scanner;
+
 
 public class Player {
     static Deck pokerDeck = new Deck();
@@ -14,16 +12,16 @@ public class Player {
     int money;
     ArrayList<Card> cards = new ArrayList<>();
     int gamePoints;
-    int firstBid=0, secondBid=0;
+    int firstBid;
+    int secondBid;
 
     public Player(String nick){
         nickname = nick;
         money = 100;
         gamePoints = 0;
-        firstBid=0;
-        secondBid=0;
+        firstBid = 0;
+        secondBid = 0;
         incrementPlayerCount();
-        Gameplay.incrementPlayerCount();
     }
 
     public void printCards(PrintWriter out){
@@ -43,7 +41,6 @@ public class Player {
     }
 
     public void dealCards(){
-//        System.out.println("Your cards:");
         pokerDeck.shuffle();
         if(!cards.isEmpty()){
             cards.clear();
@@ -54,8 +51,6 @@ public class Player {
     }
 
     public void exchangeCards(String cardStr, PrintWriter out){
-        // when deck is empty return (it might happen when somebody want to exchange
-        // cards even though cards are not dealt yet)
         if(cards.isEmpty()){
             out.println("You cannot exchange cards because you don't have any.");
             return;
@@ -109,13 +104,6 @@ public class Player {
     public static void incrementPlayerCount(){
         playerCount++;
     }
-
-    // ante kazdy wpłaca - to mozna na serwerze bezposrednio
-        // rozdajemy karty
-        // licytacja 1
-        // wymiana kart
-        // licytacja kart 2
-        // ocena kart i wygrywa osoba z najwyzszym wynikiem
 
     public void setFirstBid(int value){
         firstBid = value;

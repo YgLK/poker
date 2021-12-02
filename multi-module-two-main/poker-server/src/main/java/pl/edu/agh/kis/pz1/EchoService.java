@@ -106,20 +106,11 @@ public class EchoService extends Thread {
                         fifthPhase(input, out);
                     default:
                 }
-//                if(gamePhase == 1){
-//                    firstPhase(input, out);
-//                } else if (gamePhase == 2 || gamePhase == 4){
-//                    secondFourthPhase(input, out);
-//                } else if (gamePhase == 3){
-//                    thirdPhase(input, out);
-//                } else if (gamePhase == 5){
-//                    fifthPhase(input, out);
-//                }
             }
         }
     }
 
-    // this works fine
+
     public void firstPhase(String input, PrintWriter out){
         if (input.equalsIgnoreCase("deal cards")
                 || input.equalsIgnoreCase("get cards")) {
@@ -132,36 +123,11 @@ public class EchoService extends Thread {
         }
     }
 
-    // let's check this one
-    // TODO: check betting (gamephase equals 2 now becuase of tests #nvm i changed it back to 1 before sleep)
-    // gamephase doesnt increment to 3 after 2 bets, so it needs to be checked
     public void secondFourthPhase(String input, PrintWriter out){
         int gamePhase = Gameplay.getGamePhase();
         if (input.toLowerCase().contains("bet") && input.length() > 4){
             if(isMyTurn()){
                 placeBet(input, gamePhase, out);
-                // all of the commented code below is in the placeBet method
-//                int value = Integer.parseInt(input.replaceAll("[^0-9]+", "")),
-//                        maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys()),
-//                        maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
-//                System.out.println(value);
-//                if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
-//                    ClientIdentifiers.getPlayer(this).setBid(value);
-//                    if(gamePhase == 2){
-//                        Gameplay.passPhase2(ClientIdentifiers.getPlayer(this));
-//                    } else {
-//                        Gameplay.passPhase4(ClientIdentifiers.getPlayer(this));
-//                    }
-//                    PlayerQueue.nextPlayer();
-//                    out.println("Bet of value " + value + " has been placed.");
-//                // to this place it works
-//                } else if(Gameplay.getGamePhase() == 2){
-//                    out.println("Value should be higher or equal to " + maxFirstBet);
-//                }else if(Gameplay.getGamePhase() == 4){
-//                    out.println("Value should be higher or equal to " + maxFirstBet);
-//                }else{
-//                    out.println("It's not bet phase!");
-//                }
             } else if(!isMyTurn()){
                 out.println(isNotMyTurn);
             } else {
@@ -202,7 +168,6 @@ public class EchoService extends Thread {
         }
     }
 
-    // this should work fine
     public void thirdPhase(String input, PrintWriter out){
             // exchange cards
         if (input.toLowerCase().contains("exchange cards")) {
@@ -225,7 +190,6 @@ public class EchoService extends Thread {
             // add vote for restarting game
             Gameplay.addRestartVote(ClientIdentifiers.getPlayer(this));
             // check if all players voted for game restart, if so start next game
-            // TODO: fix Gameplay.playerCount because it says 9 when there are only 2 players
             if(Gameplay.getRestartVotes().size() == Gameplay.getPhase1().size()){
                 out.println(Gameplay.getRestartVotes().size() + "/" + Gameplay.getPhase1().size() + " voted for rematch. New game has started!");
                 restartGame();
@@ -350,8 +314,6 @@ public class EchoService extends Thread {
             // i.e. 'exchange cards 1 3 4'
             // which will give idxs = '1 3 4'
             String idxs = input.substring(15);
-            //  -- just lets leave it as it is --
-            // it will be exchange cards _ _ _ , where _ is card_idx
             ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
             PlayerQueue.nextPlayer();
             return true;
