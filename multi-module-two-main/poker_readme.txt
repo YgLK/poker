@@ -9,6 +9,7 @@ GAMEPLAN:
 USEFUL COMMANDS:
     'get cards' - take card from the table
     'exchange cards _ _ _' - exchange cards from your hand (cards are numbered 0 to 4) e.g. 'exchange cards 1 3'
+    'stay' - inform that you don't want exchange any cards in the third phase
     'queue' - show players queue
     'bet _value_' - bid the amount of _value_
     'bid status' - info about betting phase
