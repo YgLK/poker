@@ -3,6 +3,9 @@ package pl.edu.agh.kis.pz1.util;
 import java.util.ArrayList;
 
 public class Bet {
+
+    private Bet(){}
+
     public static int getMaxFirstBet(ArrayList<Player> players){
         int max = 0;
         for(Player p : players){
