@@ -8,8 +8,6 @@ import java.util.*;
 public class Gameplay {
     // TODO: for tests i declare gamePhase with value 2 (bet code has to be tested cause shit happens)
     private static int gamePhase = 1;
-//    private static int gamePhase = 1;
-    private  LinkedHashMap<Player, Integer> players;  // I am not sure if it is good idea to have this collection here
     private static int playerCount = 0;
     private static Set<Player> phase1 = new LinkedHashSet<>();
     private static HashMap<Player, Integer> phase2 = new HashMap<>();
@@ -36,8 +34,9 @@ public class Gameplay {
     public static void passPhase1(Player p){
         phase1.add(p);
         System.out.println("Phase1 size " + phase1.size()); // debug
-        System.out.println("Player count " + Gameplay.getPlayerCount()); // debug
-        if(phase1.size() == Gameplay.getPlayerCount()){
+        System.out.println("Player count " + Player.getPlayerCount()); // debug
+//        if(phase1.size() == Gameplay.getPlayerCount()){
+        if(phase1.size() == Player.getPlayerCount()){
             incrementGamePhase();
         }
         System.out.println("Game Phase:" + Gameplay.getGamePhase());
@@ -111,7 +110,7 @@ public class Gameplay {
     }
 
     public static String strGamePhase(){
-        String info = "";
+        String info;
         switch(gamePhase) {
             case 1:
                 info = "[Start] Every player pays Ante and take cards from the table.";
@@ -128,13 +127,15 @@ public class Gameplay {
             case 5:
                 info = "[Finish] Determine a winner. ['winner' to check if you won!]";
                 break;
+            default:
+                info = "";
         }
         return info;
     }
 
     public static Player pickWinner(){
         // i can pick winner on the grounds of list of players from phase1
-        Player winner = new Player("");
+        Player winner = null;
         int winnerPts = 0;
         for(Player p : phase1){
             p.evaluatePlayerHand();
