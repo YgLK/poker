@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Player {
     static Deck pokerDeck = new Deck();
+    static int playerCount = 0;
     String nickname;
     int money;
     ArrayList<Card> cards = new ArrayList<>();
@@ -21,6 +22,7 @@ public class Player {
         gamePoints = 0;
         firstBid=0;
         secondBid=0;
+        incrementPlayerCount();
         Gameplay.incrementPlayerCount();
     }
 
@@ -100,8 +102,15 @@ public class Player {
         return gamePoints;
     }
 
+    public static int getPlayerCount() {
+        return playerCount;
+    }
 
-        // ante kazdy wpłaca - to mozna na serwerze bezposrednio
+    public static void incrementPlayerCount(){
+        playerCount++;
+    }
+
+    // ante kazdy wpłaca - to mozna na serwerze bezposrednio
         // rozdajemy karty
         // licytacja 1
         // wymiana kart
@@ -133,7 +142,7 @@ public class Player {
     }
 
     public void clearPlayerData(){
-        Deck pokerDeck = new Deck();
+        pokerDeck.factory();
         money = 100;
         cards.clear();
         gamePoints = 0;
