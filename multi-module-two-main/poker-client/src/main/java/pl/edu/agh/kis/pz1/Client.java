@@ -1,8 +1,5 @@
 package pl.edu.agh.kis.pz1;
 
-import pl.edu.agh.kis.pz1.util.Gameplay;
-import pl.edu.agh.kis.pz1.util.Player;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -24,7 +21,6 @@ public class Client {
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
 
-//        System.out.println("Welcome to the Poker game room. Type 'queue' to check your position.");
         try (
                 // initialize needed data
                 Socket socket = new Socket(HOST, PORT);
@@ -45,21 +41,9 @@ public class Client {
                     break;
                 }
 
-                String str;
-                // doesnt work multiline still
-                if(in.hasNextLine() && !((str=in.nextLine()).equals(""))){
-                    do {
-                        System.out.println(str);
-                    }while(System.in.available() != 0);
+                if(in.hasNextLine()) {
+                    System.out.println(in.nextLine());
                 }
-
-                // code below doesnt work because while never ends
-                // but it's close to achieve the goal to print multiple lines at once to client
-//                while(in.hasNextLine()){
-//                    System.out.println(in.nextLine());
-//                    if(input.equals("exit"))
-//                        break;
-//                }
             }
         }
     }
@@ -75,6 +59,7 @@ public class Client {
                "    USEFUL COMMANDS:\n" +
                "'get cards' - take card from the table\n" +
                "'exchange cards _ _ _' - exchange cards from your hand (cards are numbered 0 to 4) e.g. 'exchange cards 1 3'\n" +
+               "'stay' - inform that you don't want exchange any cards in the third phase\n" +
                "'queue' - show players queue\n" +
                "'balance' - show balance\n" +
                "'bet _value_' - bid the amount of _value_\n" +
