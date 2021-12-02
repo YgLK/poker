@@ -16,6 +16,7 @@ public class EchoService extends Thread {
     private PrintWriter outPrint;
     private Scanner inScanner;
     private final ArrayList<String> commandList;
+    private final String isNotMyTurn = "It's not your turn! [Type 'queue' to show players order]";
 
     public EchoService(Socket acceptedSocket) {
         commandList = new ArrayList<>();
@@ -90,15 +91,30 @@ public class EchoService extends Thread {
                 int gamePhase = Gameplay.getGamePhase();
 
                 // recognize commands depending on the actual game phase
-                if(gamePhase == 1){
-                    firstPhase(input, out);
-                } else if (gamePhase == 2 || gamePhase == 4){
-                    secondFourthPhase(input, out);
-                } else if (gamePhase == 3){
-                    thirdPhase(input, out);
-                } else if (gamePhase == 5){
-                    fifthPhase(input, out);
+                switch(gamePhase) {
+                    case 1:
+                        firstPhase(input, out);
+                        break;
+                    case 2:
+                    case 4:
+                        secondFourthPhase(input, out);
+                        break;
+                    case 3:
+                        thirdPhase(input, out);
+                        break;
+                    case 5:
+                        fifthPhase(input, out);
+                    default:
                 }
+//                if(gamePhase == 1){
+//                    firstPhase(input, out);
+//                } else if (gamePhase == 2 || gamePhase == 4){
+//                    secondFourthPhase(input, out);
+//                } else if (gamePhase == 3){
+//                    thirdPhase(input, out);
+//                } else if (gamePhase == 5){
+//                    fifthPhase(input, out);
+//                }
             }
         }
     }
@@ -123,29 +139,31 @@ public class EchoService extends Thread {
         int gamePhase = Gameplay.getGamePhase();
         if (input.toLowerCase().contains("bet") && input.length() > 4){
             if(isMyTurn()){
-                int value = Integer.parseInt(input.replaceAll("[^0-9]+", "")),
-                        maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys()),
-                        maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
-                System.out.println(value);
-                if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
-                    ClientIdentifiers.getPlayer(this).setBid(value);
-                    if(gamePhase == 2){
-                        Gameplay.passPhase2(ClientIdentifiers.getPlayer(this));
-                    } else {
-                        Gameplay.passPhase4(ClientIdentifiers.getPlayer(this));
-                    }
-                    PlayerQueue.nextPlayer();
-                    out.println("Bet of value " + value + " has been placed.");
-                // to this place it works
-                } else if(Gameplay.getGamePhase() == 2){
-                    out.println("Value should be higher or equal to " + maxFirstBet);
-                }else if(Gameplay.getGamePhase() == 4){
-                    out.println("Value should be higher or equal to " + maxFirstBet);
-                }else{
-                    out.println("It's not bet phase!");
-                }
+                placeBet(input, gamePhase, out);
+                // all of the commented code below is in the placeBet method
+//                int value = Integer.parseInt(input.replaceAll("[^0-9]+", "")),
+//                        maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys()),
+//                        maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
+//                System.out.println(value);
+//                if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
+//                    ClientIdentifiers.getPlayer(this).setBid(value);
+//                    if(gamePhase == 2){
+//                        Gameplay.passPhase2(ClientIdentifiers.getPlayer(this));
+//                    } else {
+//                        Gameplay.passPhase4(ClientIdentifiers.getPlayer(this));
+//                    }
+//                    PlayerQueue.nextPlayer();
+//                    out.println("Bet of value " + value + " has been placed.");
+//                // to this place it works
+//                } else if(Gameplay.getGamePhase() == 2){
+//                    out.println("Value should be higher or equal to " + maxFirstBet);
+//                }else if(Gameplay.getGamePhase() == 4){
+//                    out.println("Value should be higher or equal to " + maxFirstBet);
+//                }else{
+//                    out.println("It's not bet phase!");
+//                }
             } else if(!isMyTurn()){
-                out.println("It's not your turn! [Type 'queue' to show players order]");
+                out.println(isNotMyTurn);
             } else {
                 int actualBid = 0;
                 if(Gameplay.getGamePhase() == 2){
@@ -160,18 +178,47 @@ public class EchoService extends Thread {
         }
     }
 
+    public void placeBet(String input, int gamePhase, PrintWriter out){
+        int value = Integer.parseInt(input.replaceAll("[^0-9]+", ""));
+        int maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys());
+        int maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
+        System.out.println(value);
+        if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
+            ClientIdentifiers.getPlayer(this).setBid(value);
+            if(gamePhase == 2){
+                Gameplay.passPhase2(ClientIdentifiers.getPlayer(this));
+            } else {
+                Gameplay.passPhase4(ClientIdentifiers.getPlayer(this));
+            }
+            PlayerQueue.nextPlayer();
+            out.println("Bet of value " + value + " has been placed.");
+            // to this place it works
+        } else if(Gameplay.getGamePhase() == 2){
+            out.println("Value should be higher or equal to " + maxFirstBet);
+        }else if(Gameplay.getGamePhase() == 4){
+            out.println("Value should be higher or equal to " + maxFirstBet);
+        }else{
+            out.println("It's not bet phase!");
+        }
+    }
+
     // this should work fine
     public void thirdPhase(String input, PrintWriter out){
+            // exchange cards
         if (input.toLowerCase().contains("exchange cards")) {
-            if(cardsExchange(input, out)){
+            if (cardsExchange(input, out)) {
                 Gameplay.passPhase3(ClientIdentifiers.getPlayer(this));
             }
+            // stay with the current cards
+        } else if(input.toLowerCase().contains("stay")){
+            out.println("You didn't exchange any cards.");
+            Gameplay.passPhase3(ClientIdentifiers.getPlayer(this));
+            PlayerQueue.nextPlayer();
         } else {
             otherCommands(input, out);
         }
     }
 
-    // TODO: fifth phase implement and in this restart the game
     public void fifthPhase(String input, PrintWriter out){
         Gameplay.setWinner(Gameplay.pickWinner());
         if (input.toLowerCase().contains("restart")){
@@ -181,7 +228,7 @@ public class EchoService extends Thread {
             // TODO: fix Gameplay.playerCount because it says 9 when there are only 2 players
             if(Gameplay.getRestartVotes().size() == Gameplay.getPhase1().size()){
                 out.println(Gameplay.getRestartVotes().size() + "/" + Gameplay.getPhase1().size() + " voted for rematch. New game has started!");
-                restartGame(out);
+                restartGame();
             } else {
                 out.println(Gameplay.getRestartVotes().size() + "/" + Gameplay.getPhase1().size() + " voted for rematch.");
             }
@@ -309,7 +356,7 @@ public class EchoService extends Thread {
             PlayerQueue.nextPlayer();
             return true;
         } else {
-            out.println("It's not your turn! [Type 'queue' to show players order]");
+            out.println(isNotMyTurn);
             return false;
         }
     }
@@ -328,7 +375,7 @@ public class EchoService extends Thread {
             PlayerQueue.nextPlayer();
             return true;
         } else {
-            out.println("It's not your turn! [Type 'queue' to show players order]");
+            out.println(isNotMyTurn);
             return false;
         }
     }
@@ -350,10 +397,9 @@ public class EchoService extends Thread {
         System.out.println("Number of players: " + Server.numPlayers);
     }
 
-    // TODO: restart game method implement
-    public void restartGame(PrintWriter out){
+    public void restartGame(){
         Gameplay.clearGameplayData();
         ClientIdentifiers.clearPlayersData();
-//         restart all the things I had written into the whole game
+        Gameplay.getRestartVotes().clear();
     }
 }
