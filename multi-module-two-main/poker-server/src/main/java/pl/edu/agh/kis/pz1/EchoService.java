@@ -163,7 +163,7 @@ public class EchoService extends Thread {
         } else if(Gameplay.getGamePhase() == 2){
             out.println("Value should be higher or equal to " + maxFirstBet);
         }else if(Gameplay.getGamePhase() == 4){
-            out.println("Value should be higher or equal to " + maxFirstBet);
+            out.println("Value should be higher or equal to " + maxSecondBet);
         }else{
             out.println("It's not bet phase!");
         }
