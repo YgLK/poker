@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1;
 
+import org.apache.commons.lang3.Validate;
 import pl.edu.agh.kis.pz1.util.Bet;
 import pl.edu.agh.kis.pz1.util.Gameplay;
 import pl.edu.agh.kis.pz1.util.Player;
@@ -8,17 +9,22 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EchoService extends Thread {
+    private static final Logger LOGGER = Logger.getLogger(EchoService.class.getName() );
     private Socket acceptedSocket;
     private BufferedReader is;
     private DataOutputStream os;
     private PrintWriter outPrint;
     private Scanner inScanner;
-    private final ArrayList<String> commandList;
+    private ArrayList<String> commandList;
     private final String isNotMyTurn = "It's not your turn! [Type 'queue' to show players order]";
 
     public EchoService(Socket acceptedSocket) {
+        Validate.notNull(acceptedSocket, "Accepted Socket cannot be null!");
+
         commandList = new ArrayList<>();
         commandList.add("exit");
         commandList.add("deal cards");
@@ -42,8 +48,7 @@ public class EchoService extends Thread {
             inScanner = new Scanner(acceptedSocket.getInputStream());
         } catch (IOException e) {
             try {
-                if (this.acceptedSocket != null)
-                    acceptedSocket.close();
+                acceptedSocket.close();
                 if(is != null)
                     is.close();
                 if(os != null)
@@ -62,7 +67,7 @@ public class EchoService extends Thread {
         ){
             // get nickname from the client
             String nickname = in.nextLine();
-            System.out.println(nickname + " - join server");
+            LOGGER.log(Level.INFO,"{0} - join server",nickname);
 
             // add Client to the hashmap
             ClientIdentifiers.addClient(this, new Player(nickname));
@@ -70,12 +75,11 @@ public class EchoService extends Thread {
             PlayerQueue.queue.add(this);
 
             // print number of players to server
-            System.out.println("Number of players: " + Server.numPlayers);
+            LOGGER.log(Level.INFO,"Number of players: {0}", Server.numPlayers);
             // pay Ante
             ClientIdentifiers.getPlayer(this).payAnte();
-            String input = "";
+            String input;
             while(true) {
-                System.out.println("Phase" + Gameplay.getGamePhase());
                 // get input from client
                 input = in.nextLine();
 
@@ -149,7 +153,6 @@ public class EchoService extends Thread {
         int value = Integer.parseInt(input.replaceAll("[^0-9]+", ""));
         int maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys());
         int maxSecondBet = Bet.getMaxSecondBet(ClientIdentifiers.getPlayersKeys());
-        System.out.println(value);
         if(gamePhase == 2 && value >= maxFirstBet || gamePhase == 4 && value >= maxSecondBet){
             ClientIdentifiers.getPlayer(this).setBid(value);
             if(gamePhase == 2){
@@ -204,10 +207,10 @@ public class EchoService extends Thread {
 
     public void otherCommands(String input, PrintWriter out){
         if (input.equalsIgnoreCase("show cards")) {
-            ClientIdentifiers.getPlayers().get(this).printCards(out);
+            out.println(ClientIdentifiers.getPlayers().get(this).yourCardsToString());
         } else if (input.equalsIgnoreCase("players")) {
             // print clients nicknames
-            ClientIdentifiers.printPlayers(out);
+            out.println(ClientIdentifiers.playersListToStr());
         }  else if (input.equalsIgnoreCase("evaluate hand")) {
             // evaluate points (they will be used to check who won the game)
             evaluateMyHand();
@@ -315,7 +318,7 @@ public class EchoService extends Thread {
             // i.e. 'exchange cards 1 3 4'
             // which will give idxs = '1 3 4'
             String idxs = input.substring(15);
-            ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs, out);
+            out.println(ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs));
             PlayerQueue.nextPlayer();
             return true;
         } else {
@@ -326,7 +329,7 @@ public class EchoService extends Thread {
 
     public void getCards(PrintWriter out){
         ClientIdentifiers.getPlayers().get(this).dealCards();
-        ClientIdentifiers.getPlayers().get(this).printCards(out);
+        out.println(ClientIdentifiers.getPlayers().get(this).yourCardsToString());
     }
 
     public boolean dealCards(PrintWriter out){
@@ -346,18 +349,18 @@ public class EchoService extends Thread {
     public String strServerLog(String nickname, String input) {
         // return player method call in String format
         if(commandList.contains(input)){
-            return nickname + " - call: '" + input + "'";
+            return  "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: '" + input + "'";
         } else {
-            return nickname + "- call: unknown command '" + input + "'";
+            return "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: unknown command '" + input + "'";
         }
     }
 
     public void exitServer(String nickname){
         // remove client from the players group
         Server.decrementNumPlayers();
-        System.out.println(nickname + " - quit server");
+        LOGGER.log(Level.INFO, "{0} - quit server", nickname);
         ClientIdentifiers.removeClient(this);
-        System.out.println("Number of players: " + Server.numPlayers);
+        LOGGER.log(Level.INFO, "Number of players: {0}", Server.numPlayers);
     }
 
     public void restartGame(){

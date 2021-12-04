@@ -28,12 +28,9 @@ public class Gameplay {
     // group players who have taken their cards from the table
     public static void passPhase1(Player p){
         phase1.add(p);
-        System.out.println("Phase1 size " + phase1.size()); // debug
-        System.out.println("Player count " + Player.getPlayerCount()); // debug
         if(phase1.size() == Player.getPlayerCount()){
             incrementGamePhase();
         }
-        System.out.println("Game Phase:" + Gameplay.getGamePhase());
     }
 
     // pass this phase if all bets are equal, bets != 0 and first in the
@@ -42,13 +39,12 @@ public class Gameplay {
         // put player and value of his bet to the HashSet
         phase2.put(p, p.getfirstBid());
         ArrayList<Player> pl = new ArrayList<>(phase1);
-        // debug
+
         Player lastInTheQueue = pl.get(pl.size()-1);
         // check how many unique values are there in the actual Player's bets
         if(phase2.size() == Player.getPlayerCount()){
             HashSet<Integer> uniqueValues = new HashSet<>(phase2.values());
             // I need to check if now is the first player turn
-            System.out.println(uniqueValues.size()); // debug
             if(uniqueValues.size() == 1
                     // check if p equals to the last player in the order in queue
                     // (if yes that means that all players have equal bet value, we can move further)
@@ -70,13 +66,12 @@ public class Gameplay {
         // put player and value of his bet to the HashSet
         phase4.put(p, p.getSecondBid());
         ArrayList<Player> pl = new ArrayList<>(phase1);
-        // debug
+
         Player lastInTheQueue = pl.get(pl.size()-1);
         // check how many unique values are there in the actual Player's bets
         if(phase4.size() == Player.getPlayerCount()){
             HashSet<Integer> uniqueValues = new HashSet<>(phase4.values());
-            // I need to check if now is the first player turn
-            System.out.println(uniqueValues.size()); // debug
+            // check if now is the first player turn
             if(uniqueValues.size() == 1
                     // check if p equals to the last player in the order in queue
                     // (if yes that means that all players have equal bet value, we can move further)
@@ -92,7 +87,6 @@ public class Gameplay {
 
     public static void incrementGamePhase(){
         gamePhase++;
-        System.out.println("GamePhase in Increment func:" + Gameplay.getGamePhase());
     }
 
     public static String strGamePhase(){
@@ -120,7 +114,7 @@ public class Gameplay {
     }
 
     public static Player pickWinner(){
-        // i can pick winner on the grounds of list of players from phase1
+        // I can pick winner on the grounds of the list of players from phase1
         Player winner = null;
         int winnerPts = 0;
         for(Player p : phase1){

@@ -1,15 +1,19 @@
 package pl.edu.agh.kis.pz1;
 
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Przykładowy kod do zajęć laboratoryjnych 2, 3, 4 z przedmiotu: Programowanie zaawansowane 1
  * @author Paweł Skrzyński
  */
 public class Server {
+    private static final Logger LOGGER = Logger.getLogger(EchoService.class.getName() );
     // number of players connected to the server
     protected static int numPlayers = 0;
 
@@ -22,7 +26,6 @@ public class Server {
         }
     }
 
-
     // start the server
     public static void startServer() throws IOException {
         // set PORT on which the server will work
@@ -32,8 +35,8 @@ public class Server {
 
             int serverRun = 1;
             // send initialisation information about server
-            System.out.println("Poker game server is up and running.");
-            System.out.println("Wating for players...");
+            LOGGER.log(Level.INFO, "[Poker game server is up and running]");
+            LOGGER.log(Level.INFO, "Wating for players...");
 
             while (serverRun == 1) {
                 PrintWriter tmp;

@@ -1,16 +1,15 @@
 package pl.edu.agh.kis.pz1.util;
 
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
 
 public class Player {
-    static Deck pokerDeck = new Deck();
     static int playerCount = 0;
+    static Deck pokerDeck = new Deck();
+    ArrayList<Card> cards = new ArrayList<>();
     String nickname;
     int money;
-    ArrayList<Card> cards = new ArrayList<>();
     int gamePoints;
     int firstBid;
     int secondBid;
@@ -24,20 +23,12 @@ public class Player {
         incrementPlayerCount();
     }
 
-    public void printCards(PrintWriter out){
-        StringBuffer str = new StringBuffer("Your cards: ");
+    public String yourCardsToString(){
+        StringBuilder str = new StringBuilder("Your cards: ");
             for (Card c : cards) {
                 str.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
             }
-        out.println(str);
-    }
-
-    public void printCards(){
-        StringBuffer str = new StringBuffer("Your cards: ");
-        for (Card c : cards) {
-            str.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
-        }
-        System.out.println(str);
+        return str.toString();
     }
 
     public void dealCards(){
@@ -50,32 +41,26 @@ public class Player {
         }
     }
 
-    public void exchangeCards(String cardStr, PrintWriter out){
+    public String exchangeCards(String cardStr){
         if(cards.isEmpty()){
-            out.println("You cannot exchange cards because you don't have any.");
-            return;
+            return "You cannot exchange cards because you don't have any.";
         } else if (cardStr.isEmpty()){
-            out.println("You didn't exchange any cards.");
-            return;
+            return "You didn't exchange any cards.";
         }
-
         String[] cardsIdxs = cardStr.split(" ");
-        System.out.println("Idxes are splitted.");
         // TODO: check if idxes are in the 0-4 interval (0-4 idx)
         // TODO: check if there are only int in the String
         StringBuilder announce = new StringBuilder("You exchanged: ");
         for(String c : cardsIdxs){
             int idx = Integer.parseInt(c);
-            System.out.println(idx);
-            // comunicate
+
             announce.append(cards.get(idx).getCardStr());
             // return card from exchange to the deck
             pokerDeck.addCard(cards.get(idx));
             // replace card to exchange with new one
             cards.set(idx, pokerDeck.getCard());
         }
-        out.println(announce);
-        this.printCards();
+        return announce.toString();
     }
 
     public void evaluatePlayerHand(){
@@ -97,6 +82,23 @@ public class Player {
         return gamePoints;
     }
 
+    public void setBid(int value){
+        if(Gameplay.getGamePhase() == 2){
+            firstBid = value;
+        } else if (Gameplay.getGamePhase() == 4){
+            secondBid = value;
+        }
+    }
+
+    public void clearPlayerData(){
+        pokerDeck.factory();
+        money = 100;
+        cards.clear();
+        gamePoints = 0;
+        firstBid=0;
+        secondBid=0;
+    }
+
     public static int getPlayerCount() {
         return playerCount;
     }
@@ -114,27 +116,10 @@ public class Player {
     }
 
     public int getfirstBid(){
-     return firstBid;
+        return firstBid;
     }
 
     public int getSecondBid(){
         return secondBid;
-    }
-
-    public void setBid(int value){
-        if(Gameplay.getGamePhase() == 2){
-            firstBid = value;
-        } else if (Gameplay.getGamePhase() == 4){
-            secondBid = value;
-        }
-    }
-
-    public void clearPlayerData(){
-        pokerDeck.factory();
-        money = 100;
-        cards.clear();
-        gamePoints = 0;
-        firstBid=0;
-        secondBid=0;
     }
 }

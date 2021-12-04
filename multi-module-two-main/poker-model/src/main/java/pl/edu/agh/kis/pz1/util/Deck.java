@@ -53,18 +53,20 @@ public class Deck {
         Collections.shuffle(cards);
     }
 
-    public void printDeck(){
-        for (Card c : cards) {
-            System.out.println(c.getCardRank() + " " + c.getCardSuit());
-        }
-    }
-
     public void removeCard(int idx){
         cards.remove(idx);
     }
 
     public void addCard(Card c){
         cards.add(c);
+    }
+
+    public String toString(){
+        StringBuilder strDeck = new StringBuilder();
+        for (Card c : cards) {
+            strDeck.append("[").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("]");
+        }
+        return strDeck.toString();
     }
 
 }

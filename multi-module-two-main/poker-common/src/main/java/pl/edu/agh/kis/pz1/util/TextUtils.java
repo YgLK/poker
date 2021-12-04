@@ -5,7 +5,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.UUID;
 
 public class TextUtils {
@@ -34,15 +33,13 @@ public class TextUtils {
 
         // For specifying wrong message digest algorithms
         catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-    }
-    public static String generateRandomHash() {
-        return UUID.randomUUID().toString();
+        return "";
     }
 
-    public static String generateHash(String str) {
-        return DigestUtils.sha512Hex(str);
+    public static String generateRandomHash() {
+        return UUID.randomUUID().toString();
     }
 
 }

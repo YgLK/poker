@@ -9,6 +9,7 @@ public class HandEvaluator {
     private static LinkedHashMap<Rank, Integer> rankCounter = new LinkedHashMap<>();
     private static LinkedHashMap<Suit, Integer> suitCounter = new LinkedHashMap<>();
 
+    private HandEvaluator(){}
 
     public static void initializeCounters(){
         // initialize rankCounter with 0s
@@ -43,19 +44,19 @@ public class HandEvaluator {
             pointsHand = 200;
         } else if (CardHierarchy.isStraightFlush(rankCounter, suitCounter)){
             pointsHand = 180;
-        } else if (CardHierarchy.isFourOfKind(rankCounter, suitCounter)){
+        } else if (CardHierarchy.isFourOfKind(rankCounter)){
             pointsHand = 160;
-        } else if (CardHierarchy.isFullHouse(rankCounter, suitCounter)){
+        } else if (CardHierarchy.isFullHouse(rankCounter)){
             pointsHand = 140;
-        }else if (CardHierarchy.isFlush(rankCounter, suitCounter)){
+        }else if (CardHierarchy.isFlush(suitCounter)){
             pointsHand = 120;
-        }else if (CardHierarchy.isStraight(rankCounter, suitCounter)){
+        }else if (CardHierarchy.isStraight(rankCounter)){
             pointsHand = 100;
-        }else if (CardHierarchy.isThreeOfKind(rankCounter, suitCounter)){
+        }else if (CardHierarchy.isThreeOfKind(rankCounter)){
             pointsHand = 80;
-        }else if (CardHierarchy.isTwoPairs(rankCounter, suitCounter)){
+        }else if (CardHierarchy.isTwoPairs(rankCounter)){
             pointsHand = 60;
-        }else if (CardHierarchy.isOnePair(rankCounter, suitCounter)){
+        }else if (CardHierarchy.isOnePair(rankCounter)){
             pointsHand = 40;
         }
 
@@ -65,14 +66,14 @@ public class HandEvaluator {
     public static int getHighestCardPoints(){
         // add points to the score of the highest Card
         int initPoints = 13;
-        Rank highest = CardHierarchy.getHighestRank(rankCounter, suitCounter);
+        Rank highest = CardHierarchy.getHighestRank(rankCounter);
         // for going down in Rank hierarchy subtract 1 from init Points
         // until you find the highest owned card rank
         for(Rank r : Rank.values()){
             if(highest == r){
                 break;
             }
-            // when you come up to your highest card break substracting loop
+            // when you come up to your highest card break subtracting loop
             initPoints -= 1;
         }
         // return left points

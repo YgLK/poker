@@ -1,11 +1,13 @@
 package pl.edu.agh.kis.pz1;
 
-import java.util.ArrayList;
+
 import java.util.Deque;
 import java.util.LinkedList;
 
 public class PlayerQueue {
     public static Deque<EchoService> queue = new LinkedList<>();
+
+    private PlayerQueue(){}
 
     public static String strQueue() {
         StringBuilder strQueue = new StringBuilder("Queue: ");

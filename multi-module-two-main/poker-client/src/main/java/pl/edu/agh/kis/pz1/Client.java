@@ -1,9 +1,11 @@
 package pl.edu.agh.kis.pz1;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 
 /**
@@ -11,6 +13,7 @@ import java.util.Scanner;
  * @author Paweł Skrzyński
  */
 public class Client {
+    private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
     String nickname;
 
     public static void main( String[] args ) {
@@ -24,9 +27,9 @@ public class Client {
     }
 
     Client(){
-        System.out.println(getInstructions());
         // set nickname
-        System.out.print("Enter your nickname: ");
+        LOGGER.info(getInstructions());
+        LOGGER.info("\nEnter your nickname: ");
         Scanner sc = new Scanner(System.in);
         nickname = sc.nextLine();
     }
@@ -35,6 +38,7 @@ public class Client {
         // set hostname and port to which client will be joining
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
+        PrintStream outClient = System.out;
 
         try (
                 // initialize needed data
@@ -44,12 +48,12 @@ public class Client {
                 Scanner s = new Scanner(System.in)
         ) {
             out.println(nickname); // pass nickname to the server
-            System.out.println("You've paid Ante. Type 'get cards' to take cards from the table.");
+            outClient.println("You've paid Ante. Type 'get cards' to take cards from the table.");
             String input = "";
             while (true) {
                 // get input from Client
-                System.out.print(nickname + " >>  ");
-                    input = s.nextLine();
+                outClient.print(nickname + " >>  ");
+                input = s.nextLine();
                 // pass input to the server
                 out.println(input);
                 if (input.equalsIgnoreCase("exit")){
@@ -57,14 +61,14 @@ public class Client {
                 }
 
                 if(in.hasNextLine()) {
-                    System.out.println(in.nextLine());
+                    outClient.println(in.nextLine());
                 }
             }
         }
     }
 
    public static String getInstructions(){
-       return "Five-card draw (Poker) INSTRUCTIONS\n" +
+       return "\nFive-card draw (Poker) INSTRUCTIONS\n" +
                "    GAMEPLAN:\n" +
                "1. Every player pays Ante and take cards from the table.\n" +
                "2. First round of betting.\n" +

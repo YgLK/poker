@@ -2,15 +2,15 @@ package pl.edu.agh.kis.pz1;
 
 import pl.edu.agh.kis.pz1.util.Player;
 
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ClientIdentifiers {
     // HashMap which contains EchoServices of the Client and attached to it instance of Player class
     private static LinkedHashMap<EchoService, Player> players = new LinkedHashMap<>();
+
+    private ClientIdentifiers(){};
 
     // return players HashMap
     public static LinkedHashMap<EchoService, Player> getPlayers(){
@@ -41,12 +41,12 @@ public class ClientIdentifiers {
     }
 
     // print information about current clients
-    public static void printPlayers(PrintWriter out){
+    public static String playersListToStr(){
         StringBuilder str = new StringBuilder("Players [" + Server.numPlayers + "]: ");
-        for(EchoService es : players.keySet()){
-            str.append("[").append(players.get(es).getNickname()).append("] "); // check if players are added
+        for(Map.Entry<EchoService, Player> entry : players.entrySet()){
+            str.append("[").append(entry.getValue().getNickname()).append("] "); // check if players are added
         }
-        out.println(str);
+        return str.toString();
     }
 
     public static void clearPlayersData(){
