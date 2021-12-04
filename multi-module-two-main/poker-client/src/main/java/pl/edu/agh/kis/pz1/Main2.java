@@ -7,13 +7,13 @@ import java.io.IOException;
  * @author Paweł Skrzyński
  */
 public class Main2 {
-    public static void main( String[] args ) {
-
-        Client client1 = new Client();
-        try {
-            client1.joinServer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main( String[] args ) {
+//
+//        Client client1 = new Client();
+//        try {
+//            client1.joinServer();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

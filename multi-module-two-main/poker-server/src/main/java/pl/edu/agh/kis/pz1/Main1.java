@@ -10,11 +10,11 @@ import java.io.IOException;
  * @author Paweł Skrzyński
  */
 public class Main1 {
-    public static void main( String[] args ) {
-        try {
-            Server.startServer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main( String[] args ) {
+//        try {
+//            Server.startServer();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

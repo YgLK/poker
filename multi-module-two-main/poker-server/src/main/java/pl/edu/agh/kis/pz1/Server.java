@@ -5,10 +5,23 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
+/**
+ * Przykładowy kod do zajęć laboratoryjnych 2, 3, 4 z przedmiotu: Programowanie zaawansowane 1
+ * @author Paweł Skrzyński
+ */
 public class Server {
     // number of players connected to the server
     protected static int numPlayers = 0;
+
+
+    public static void main( String[] args ) {
+        try {
+            startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // start the server
     public static void startServer() throws IOException {
