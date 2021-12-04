@@ -17,11 +17,12 @@ public class Server {
         // open the server socket on the PORT
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
 
+            int serverRun = 1;
             // send initialisation information about server
             System.out.println("Poker game server is up and running.");
             System.out.println("Wating for players...");
 
-            while (true) {
+            while (serverRun == 1) {
                 PrintWriter tmp;
                 // accept clientSocket to the server
                 Socket clientSocket = serverSocket.accept();

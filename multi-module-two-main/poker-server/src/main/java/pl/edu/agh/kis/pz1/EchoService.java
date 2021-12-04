@@ -104,6 +104,7 @@ public class EchoService extends Thread {
                         break;
                     case 5:
                         fifthPhase(input, out);
+                        break;
                     default:
                 }
             }

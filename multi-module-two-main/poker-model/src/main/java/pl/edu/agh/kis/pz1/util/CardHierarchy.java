@@ -6,6 +6,9 @@ import java.util.LinkedHashMap;
 
 // class which helps to define which poker hands does player have
 public class CardHierarchy {
+
+    private CardHierarchy(){}
+
     public static boolean isRoyalFlush(LinkedHashMap<Rank, Integer> rankCounter, LinkedHashMap<Suit, Integer> suitCounter){
         return suitCounter.containsValue(5)
                 && rankCounter.get(Rank.ACE) == 1
