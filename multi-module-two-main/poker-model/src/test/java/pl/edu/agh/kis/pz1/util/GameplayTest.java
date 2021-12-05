@@ -10,6 +10,10 @@ public class GameplayTest {
 
     @BeforeClass
     public static void  initializePlayers(){
+        // clear data from previous tests
+        Gameplay.clearGameplayData();
+        Player.setPlayerCount(0);
+
         // add players to the array list
         players.add(new Player("First"));
         players.add(new Player("Second"));
