@@ -14,6 +14,7 @@ public class Player {
     int firstBid;
     int secondBid;
 
+
     public Player(String nick){
         nickname = nick;
         money = 100;
@@ -23,13 +24,6 @@ public class Player {
         incrementPlayerCount();
     }
 
-    public String yourCardsToString(){
-        StringBuilder str = new StringBuilder("Your cards: ");
-            for (Card c : cards) {
-                str.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
-            }
-        return str.toString();
-    }
 
     public void dealCards(){
         pokerDeck.shuffle();
@@ -63,23 +57,12 @@ public class Player {
         return announce.toString();
     }
 
-    public void evaluatePlayerHand(){
-        gamePoints = HandEvaluator.evaluateHand(cards);
-    }
-
-    public void payAnte(){
-        // let's say that Ante is 5
-        money -= 5;
-    }
-
-    public int getMoney(){
-        return money;
-    }
-
-    public String getNickname() {return nickname;}
-
-    public int getGamePoints(){
-        return gamePoints;
+    public String yourCardsToString(){
+        StringBuilder str = new StringBuilder("Your cards: ");
+        for (Card c : cards) {
+            str.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
+        }
+        return str.toString();
     }
 
     public void setBid(int value){
@@ -92,34 +75,62 @@ public class Player {
 
     public void clearPlayerData(){
         pokerDeck.factory();
-        money = 100;
         cards.clear();
+        money = 100;
         gamePoints = 0;
         firstBid=0;
         secondBid=0;
     }
 
-    public static int getPlayerCount() {
-        return playerCount;
+    public void payAnte(){
+        // let's say that Ante is 5
+        money -= 5;
+    }
+
+    public void evaluatePlayerHand(){
+        gamePoints = HandEvaluator.evaluateHand(cards);
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
+    public int getMoney(){
+        return money;
+    }
+
+    public String getNickname() {return nickname;}
+
+    public int getGamePoints(){
+        return gamePoints;
     }
 
     public static void incrementPlayerCount(){
         playerCount++;
     }
 
+    public static int getPlayerCount() {
+        return playerCount;
+    }
+
     public void setFirstBid(int value){
         firstBid = value;
+    }
+
+    public int getFirstBid() {
+        return firstBid;
     }
 
     public void setSecondBid(int value){
         secondBid = value;
     }
 
+    public int getSecondBid(){
+        return secondBid;
+    }
+
     public int getfirstBid(){
         return firstBid;
     }
 
-    public int getSecondBid(){
-        return secondBid;
-    }
 }
