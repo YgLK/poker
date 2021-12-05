@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1.util;
 
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -80,4 +81,16 @@ public class HandEvaluator {
         return initPoints;
     }
 
+    public static void clear(){
+        rankCounter.clear();
+        suitCounter.clear();
+    }
+
+    public static LinkedHashMap<Rank, Integer> getRankCounter() {
+        return rankCounter;
+    }
+
+    public static LinkedHashMap<Suit, Integer> getSuitCounter() {
+        return suitCounter;
+    }
 }
