@@ -155,6 +155,10 @@ public class Gameplay {
         gamePhase = 1;
     }
 
+    public static void setGamePhase(int value){
+        gamePhase = value;
+    }
+
     public static void addRestartVote(Player p){
         restartVotes.put(p, true);
     }
