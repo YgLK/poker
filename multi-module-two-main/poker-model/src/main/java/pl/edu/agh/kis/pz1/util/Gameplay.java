@@ -30,7 +30,7 @@ public class Gameplay {
     private static HashMap<Player, Boolean> restartVotes = new HashMap<>();
 
 
-    Gameplay(){}
+    private Gameplay(){}
 
     // group players who have taken their cards from the table
     public static void passPhase1(Player p){
