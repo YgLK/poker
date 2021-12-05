@@ -10,7 +10,7 @@ public class DeckTest{
     // tests need to have better names
 
     @Test
-    public void testGetCards() {
+    public void shouldReturnCards() {
         Deck d = new Deck();
         ArrayList<Card> cards = d.getCards();
         // check if there are 52 cards in the Deck
@@ -18,7 +18,7 @@ public class DeckTest{
     }
 
     @Test
-    public void testFactory() {
+    public void shouldFactorySortDeck() {
         Deck d = new Deck();
         // shuffle Deck
         d.shuffle();
@@ -31,7 +31,7 @@ public class DeckTest{
     }
 
     @Test
-    public void testOrderShuffle() {
+    public void shouldShuffleTheDeck() {
         Deck d = new Deck();
         // shuffle Deck
         d.shuffle();
@@ -42,7 +42,7 @@ public class DeckTest{
     }
 
     @Test
-    public void testSizeShuffle() {
+    public void shouldDeckHasSize52() {
         Deck d = new Deck();
         // shuffle Deck
         d.shuffle();

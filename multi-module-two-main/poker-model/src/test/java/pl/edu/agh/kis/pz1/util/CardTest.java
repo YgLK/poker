@@ -8,26 +8,26 @@ public class CardTest {
     // tests need to have better names
 
     @Test
-    public void getCardSuit() {
+    public void shouldReturnCardSuit() {
         Card c = new Card(Suit.DIAMONDS, Rank.ACE);
         assertEquals(Suit.DIAMONDS, c.getCardSuit());
     }
 
     @Test
-    public void getCardRank() {
+    public void shouldReturnCardRank() {
         Card c = new Card(Suit.DIAMONDS, Rank.ACE);
         assertEquals(Rank.ACE, c.getCardRank());
     }
 
     @Test
-    public void setCardSuit() {
+    public void shouldSetCardSuit() {
         Card c = new Card(Suit.DIAMONDS, Rank.ACE);
         c.setCardSuit(Suit.SPADES);
         assertEquals(Suit.SPADES, c.getCardSuit());
     }
 
     @Test
-    public void setCardRank() {
+    public void shouldSetCardRank() {
         Card c = new Card(Suit.DIAMONDS, Rank.ACE);
         c.setCardRank(Rank.JACK);
         assertEquals(Rank.JACK, c.getCardRank());
