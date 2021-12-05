@@ -113,6 +113,10 @@ public class Player {
         return playerCount;
     }
 
+    public static void setPlayerCount(int playerCount) {
+        Player.playerCount = playerCount;
+    }
+
     public void setFirstBid(int value){
         firstBid = value;
     }
