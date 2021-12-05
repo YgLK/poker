@@ -20,7 +20,7 @@ public class CardHierarchy {
     }
 
     public static boolean isStraightFlush(LinkedHashMap<Rank, Integer> rankCounter, LinkedHashMap<Suit, Integer> suitCounter){
-        return suitCounter.size() == 1 && isFiveRanksInRow(rankCounter);
+        return suitCounter.containsValue(5) && isFiveRanksInRow(rankCounter);
     }
 
     public static boolean isFourOfKind(LinkedHashMap<Rank, Integer> rankCounter){
