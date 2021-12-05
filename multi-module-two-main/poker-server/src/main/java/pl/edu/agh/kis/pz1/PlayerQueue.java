@@ -25,8 +25,7 @@ public class PlayerQueue {
         PlayerQueue.queue.removeFirst();
     }
 
-    // something doesn't work here atm
-    public static void passPlayer(){
-        queue.pop();
+    public static Deque<EchoService> getQueue() {
+        return queue;
     }
 }
