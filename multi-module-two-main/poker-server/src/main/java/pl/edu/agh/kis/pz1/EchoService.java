@@ -12,6 +12,11 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+/**
+ * Main class used for communication between client and server.
+ * Through this class data is exchanged.
+ */
 public class EchoService extends Thread {
     private static final Logger LOGGER = Logger.getLogger(EchoService.class.getName() );
     private Socket acceptedSocket;
@@ -22,22 +27,16 @@ public class EchoService extends Thread {
     private ArrayList<String> commandList;
     private final String isNotMyTurn = "It's not your turn! [Type 'queue' to show players order]";
 
-    public EchoService(Socket acceptedSocket) {
-        Validate.notNull(acceptedSocket, "Accepted Socket cannot be null!");
 
-        commandList = new ArrayList<>();
-        commandList.add("exit");
-        commandList.add("deal cards");
-        commandList.add("get cards");
-        commandList.add("show cards");
-        commandList.add("exchange cards");
-        commandList.add("players");
-        commandList.add("evaluate hand");
-        commandList.add("queue");
-        commandList.add("balance");
-        commandList.add("fold");
-        commandList.add("bet");
-        commandList.add("phase");
+    /**
+     * EchoService constructor which pair Client with the EchoService allowing
+     * to easier communication with the use of created commands.
+     *
+     * @param acceptedSocket Client socket
+     */
+    public EchoService(Socket acceptedSocket) {
+        Validate.notNull(acceptedSocket, "Accepted Socket is NULL.");
+        initInstructions();
 
         try {
             // initialize needed data
@@ -59,6 +58,10 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Overridden Thread run method which allows Server and Client
+     * to communicate with the use of created commands.
+     */
     @Override
     public void run() {
         try (
@@ -115,7 +118,16 @@ public class EchoService extends Thread {
         }
     }
 
-
+    /**
+     * Method used for handling first phase of the Game
+     * in which every player gets the cards by
+     * 'deal cards' or 'get cards' method.
+     *
+     * If other command is sent otherCommands() method is called.
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
+     */
     public void firstPhase(String input, PrintWriter out){
         if (input.equalsIgnoreCase("deal cards")
                 || input.equalsIgnoreCase("get cards")) {
@@ -128,6 +140,16 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used for handling second and fourth phases of the Game
+     * in which every player place bets by calling 'bet XX' command,
+     * where XX is bet value.
+     *
+     * If other command is sent otherCommands() method is called.
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
+     */
     public void secondFourthPhase(String input, PrintWriter out){
         int gamePhase = Gameplay.getGamePhase();
         if (input.toLowerCase().contains("bet") && input.length() > 4){
@@ -138,7 +160,7 @@ public class EchoService extends Thread {
             } else {
                 int actualBid = 0;
                 if(Gameplay.getGamePhase() == 2){
-                    actualBid = ClientIdentifiers.getPlayer(this).getfirstBid();
+                    actualBid = ClientIdentifiers.getPlayer(this).getFirstBid();
                 } else if(Gameplay.getGamePhase() == 4){
                     actualBid = ClientIdentifiers.getPlayer(this).getSecondBid();
                 }
@@ -149,6 +171,15 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used placing Bets during the second and fourth game phase.
+     * In here bet values are extracted from the command String and
+     * set to the suitable player.
+     *
+     * @param input String containing Client's sent command
+     * @param gamePhase current game phase
+     * @param out PrintWriter which will print the result
+     */
     public void placeBet(String input, int gamePhase, PrintWriter out){
         int value = Integer.parseInt(input.replaceAll("[^0-9]+", ""));
         int maxFirstBet = Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys());
@@ -172,6 +203,13 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used for handling third phase of the game in which
+     * players exchange their cards.
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
+     */
     public void thirdPhase(String input, PrintWriter out){
             // exchange cards
         if (input.toLowerCase().contains("exchange cards")) {
@@ -188,6 +226,16 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used for handling fifth phase of the game in which
+     * the winner is determined.
+     *
+     * Players are also able to call 'restart' command. If all of them
+     * call it the new game will start.
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
+     */
     public void fifthPhase(String input, PrintWriter out){
         Gameplay.setWinner(Gameplay.pickWinner());
         if (input.toLowerCase().contains("restart")){
@@ -205,6 +253,23 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used for handling general commands which
+     * are not strongly associated with the specific
+     * game phase.
+     *
+     * Sample commands:
+     * - 'show cards' - show owned cards
+     * - 'players' - show players list
+     * - 'queue' - show queue order
+     * - 'bid status' - show current bid the highest value
+     * - 'phase' - show phase with short description
+     * - 'winner' - show the winner
+     *  etc.
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
+     */
     public void otherCommands(String input, PrintWriter out){
         if (input.equalsIgnoreCase("show cards")) {
             out.println(ClientIdentifiers.getPlayers().get(this).yourCardsToString());
@@ -236,6 +301,12 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method used for finding maximum value of
+     * the current game phase bet.
+     *
+     * Used in the second or fourth game phase (bet phases).
+     */
     public int getMaxBet(){
         if(Gameplay.getGamePhase() == 2){
             return Bet.getMaxFirstBet(ClientIdentifiers.getPlayersKeys());
@@ -246,6 +317,131 @@ public class EchoService extends Thread {
         }
     }
 
+    /**
+     * Method returning text representation of the queue.
+     */
+    public String strGetQueue(){
+        // communicate that it's your turn
+        if(isMyTurn()){
+            return "Your turn. " + PlayerQueue.strQueue();
+        } else {
+            // return message with queue
+            return PlayerQueue.strQueue();
+        }
+    }
+
+    /**
+     * Method returning text representation of the Hand evaluation points.
+     */
+    public String strGetHandValue(){
+        return ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
+                + ClientIdentifiers.getPlayers().get(this).getGamePoints();
+    }
+
+    /**
+     * Method used to find the actual Client bet value.
+     * Used in the second or fourth game phase (bet phases).
+     *
+     * @return actual Client bet value
+     */
+    public int getActualBetValue(){
+        int gamePhase = Gameplay.getGamePhase();
+        if(gamePhase == 2){
+            return ClientIdentifiers.getPlayer(this).getFirstBid();
+        } else if (gamePhase == 4){
+            return ClientIdentifiers.getPlayer(this).getSecondBid();
+        } else {
+            return -1;
+        }
+    }
+
+    public void evaluateMyHand(){
+        ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
+    }
+
+    /**
+     * Method used to exchange Player's, corresponding to Client, cards.
+     * Used in the third game phase (exchange phase).
+     *
+     * @return true if success
+     *         else false
+     */
+    public boolean cardsExchange(String input, PrintWriter out){
+        // check if it's your turn
+        if(isMyTurn()){
+            // get substring after 'exchange cards '
+            // i.e. 'exchange cards 1 3 4'
+            // which will give idxs = '1 3 4'
+            String idxs = input.substring(15);
+            out.println(ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs));
+            PlayerQueue.nextPlayer();
+            return true;
+        } else {
+            out.println(isNotMyTurn);
+            return false;
+        }
+    }
+
+    /**
+     * Method used in the first GamePhase for dealing cards at the beginning of the game.
+     *
+     * @param out PrintWriter which will print the result
+     * @return true if success
+     *         else false
+     */
+    public boolean dealCards(PrintWriter out){
+        // check if it's your turn
+        if(isMyTurn()){
+            // deal Cards for a player which is associated with this EchoService
+            ClientIdentifiers.getPlayers().get(this).dealCards();
+            out.println("Cards have been dealt. ['show cards' will tell you what you got]");
+            PlayerQueue.nextPlayer();
+            return true;
+        } else {
+            out.println(isNotMyTurn);
+            return false;
+        }
+    }
+
+    /**
+     * Method used for logging players' command calls.
+     *
+     * @param nickname Nick of the calling Player
+     * @param input String with the command
+     * @return Log with the information about called command, player nickname and phase in which
+     *         command was called.
+     */
+    public String strServerLog(String nickname, String input) {
+        // return player method call in String format
+        if(commandList.contains(input)){
+            return  "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: '" + input + "'";
+        } else {
+            return "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: unknown command '" + input + "'";
+        }
+    }
+
+    /**
+     * Method lets Client exit the Server.
+     *
+     * @param nickname Nick of the exiting Player.
+     */
+    public void exitServer(String nickname){
+        // remove client from the players group
+        Server.decrementNumPlayers();
+        LOGGER.log(Level.INFO, "{0} - quit server", nickname);
+        ClientIdentifiers.removeClient(this);
+        LOGGER.log(Level.INFO, "Number of players: {0}", Server.numPlayers);
+    }
+
+    /**
+     * Method which restarts the game.
+     * Is called when all players votes for the restart in the fifth game phase.
+     */
+    public void restartGame(){
+        Gameplay.clearGameplayData();
+        ClientIdentifiers.clearPlayersData();
+        Gameplay.getRestartVotes().clear();
+    }
 
     public BufferedReader getIs() {
         return is;
@@ -275,97 +471,20 @@ public class EchoService extends Thread {
         return "Your balance: " + ClientIdentifiers.getPlayers().get(this).getMoney()+ "";
     }
 
-    public String strGetQueue(){
-        // communicate that it's your turn
-        if(isMyTurn()){
-            return "Your turn.";
-        } else {
-            // evaluate points (they will be used to check who won the game)
-            return PlayerQueue.strQueue();
-        }
+    public void initInstructions(){
+        commandList = new ArrayList<>();
+        commandList.add("exit");
+        commandList.add("deal cards");
+        commandList.add("get cards");
+        commandList.add("show cards");
+        commandList.add("exchange cards");
+        commandList.add("players");
+        commandList.add("evaluate hand");
+        commandList.add("queue");
+        commandList.add("balance");
+        commandList.add("fold");
+        commandList.add("bet");
+        commandList.add("phase");
     }
 
-    public String strGetHandValue(){
-        return ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
-                + ClientIdentifiers.getPlayers().get(this).getGamePoints();
-    }
-
-    public String strGetInstructions(){
-        return "For instructions type in 'man method'. Method list:" +
-                "['deal cards', 'show cards' 'exchange cards', " +
-                "'players', 'evaluate hand', 'queue', 'balance', 'fold', 'bid']";
-    }
-
-    public int getActualBetValue(){
-        int gamePhase = Gameplay.getGamePhase();
-        if(gamePhase == 2){
-            return ClientIdentifiers.getPlayer(this).getfirstBid();
-        } else if (gamePhase == 4){
-            return ClientIdentifiers.getPlayer(this).getSecondBid();
-        } else {
-            return -1;
-        }
-    }
-
-    public void evaluateMyHand(){
-        ClientIdentifiers.getPlayers().get(this).evaluatePlayerHand();
-    }
-
-    public boolean cardsExchange(String input, PrintWriter out){
-        // check if it's your turn
-        if(isMyTurn()){
-            // get substring after 'exchange cards '
-            // i.e. 'exchange cards 1 3 4'
-            // which will give idxs = '1 3 4'
-            String idxs = input.substring(15);
-            out.println(ClientIdentifiers.getPlayers().get(this).exchangeCards(idxs));
-            PlayerQueue.nextPlayer();
-            return true;
-        } else {
-            out.println(isNotMyTurn);
-            return false;
-        }
-    }
-
-    public void getCards(PrintWriter out){
-        ClientIdentifiers.getPlayers().get(this).dealCards();
-        out.println(ClientIdentifiers.getPlayers().get(this).yourCardsToString());
-    }
-
-    public boolean dealCards(PrintWriter out){
-        // check if it's your turn
-        if(isMyTurn()){
-            // deal Cards for a player which is associated with this EchoService
-            ClientIdentifiers.getPlayers().get(this).dealCards();
-            out.println("Cards have been dealt. ['show cards' will tell you what you got]");
-            PlayerQueue.nextPlayer();
-            return true;
-        } else {
-            out.println(isNotMyTurn);
-            return false;
-        }
-    }
-
-    public String strServerLog(String nickname, String input) {
-        // return player method call in String format
-        if(commandList.contains(input)){
-            return  "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: '" + input + "'";
-        } else {
-            return "[Phase " + Gameplay.getGamePhase() + "] " + nickname + " call: unknown command '" + input + "'";
-        }
-    }
-
-    public void exitServer(String nickname){
-        // remove client from the players group
-        Server.decrementNumPlayers();
-        LOGGER.log(Level.INFO, "{0} - quit server", nickname);
-        ClientIdentifiers.removeClient(this);
-        LOGGER.log(Level.INFO, "Number of players: {0}", Server.numPlayers);
-    }
-
-    public void restartGame(){
-        Gameplay.clearGameplayData();
-        ClientIdentifiers.clearPlayersData();
-        Gameplay.getRestartVotes().clear();
-    }
 }
