@@ -314,7 +314,7 @@ public class EchoService extends Thread {
         if(Gameplay.getWinner() == null){
             out.println("Winner hasn't been established yet.");
         } else {
-            StringBuilder winCards = new StringBuilder("The winner cards: ");
+            StringBuilder winCards = new StringBuilder("The winner's cards: ");
             for (Card c : Gameplay.getWinner().getCards()) {
                 winCards.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
             }
