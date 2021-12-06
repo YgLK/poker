@@ -12,11 +12,10 @@
     <artifactId>poker-model</artifactId>
     <packaging>jar</packaging>
 
-    <name>Modul na klasy pomocnicze</name>
+    <name>Module for classes associated with poker model</name>
 
     <dependencies>
 
-        <!-- Dodane przez pskrzynski na potrzeby przykladu do zajec laboratoryjnych -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

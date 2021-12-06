@@ -12,11 +12,10 @@
     <artifactId>poker-common</artifactId>
     <packaging>jar</packaging>
 
-    <name>Modul na klasy uzytkowe</name>
+    <name>Module for utility classes.</name>
 
     <dependencies>
 
-        <!-- Dodane przez pskrzynski na potrzeby przykladu do zajec laboratoryjnych -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

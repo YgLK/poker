@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>poker-server</artifactId>
-  <name>Pierwszy modul wykonywalny aplikacji - klasa Main1 z metoda main</name>
+  <name>Poker server module with main method.</name>
 
   <!-- Dodane przez pskrzynski -->
   <properties>
@@ -61,9 +61,9 @@
         </executions>
       </plugin>
     </plugins>
-  </build> 
+  </build>
 
-  <!-- najświeższa wersja w otwartym repo maven to 4.13.2 -->
+  <!-- the newest version from opened maven repo is 4.13.2 -->
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
