@@ -2,7 +2,6 @@ package pl.edu.agh.kis.pz1;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -55,7 +54,6 @@ public class Server {
             LOGGER.log(Level.INFO, "Wating for players...");
 
             while (serverRun == 1) {
-                PrintWriter tmp;
                 // accept clientSocket to the server
                 Socket clientSocket = serverSocket.accept();
                 // increment count of players

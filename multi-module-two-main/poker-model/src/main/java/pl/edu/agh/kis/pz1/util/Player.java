@@ -122,28 +122,29 @@ public class Player {
     }
 
     public String getStringHandCombination(){
-        if(gamePoints > 200){
+        if(isGamePointsHigherThan200(gamePoints)){
             return "Royal Flush";
-        } else if(gamePoints > 180){
+        } else if(isGamePointsHigherThan180(gamePoints)){
             return "Straight Flush";
-        } else if(gamePoints > 160){
+        } else if(isGamePointsHigherThan160(gamePoints)){
             return "Four Of Kind";
-        } else if(gamePoints > 140){
+        } else if(isGamePointsHigherThan140(gamePoints)){
             return "Full House";
-        } else if(gamePoints > 120){
+        } else if(isGamePointsHigherThan120(gamePoints)){
             return "Flush";
-        } else if(gamePoints > 100){
+        } else if(isGamePointsHigherThan100(gamePoints)){
             return "Straight";
-        } else if(gamePoints > 80){
+        } else if(isGamePointsHigherThan80(gamePoints)){
             return "Three Of Kind";
-        } else if(gamePoints > 60){
+        } else if(isGamePointsHigherThan60(gamePoints)){
             return "Two Pairs";
-        } else if(gamePoints > 40){
+        } else if(isGamePointsHigherThan40(gamePoints)){
             return "One Pair";
         } else {
             return "The highest card";
         }
     }
+
 
     public void evaluatePlayerHand(){
         gamePoints = HandEvaluator.evaluateHand(cards);
@@ -195,4 +196,13 @@ public class Player {
         return secondBid;
     }
 
+    public boolean isGamePointsHigherThan200(int gamePoints){ return gamePoints > 200; }
+    public boolean isGamePointsHigherThan180(int gamePoints){ return gamePoints > 180; }
+    public boolean isGamePointsHigherThan160(int gamePoints){ return gamePoints > 160; }
+    public boolean isGamePointsHigherThan140(int gamePoints){ return gamePoints > 140; }
+    public boolean isGamePointsHigherThan120(int gamePoints){ return gamePoints > 120; }
+    public boolean isGamePointsHigherThan100(int gamePoints){ return gamePoints > 100; }
+    public boolean isGamePointsHigherThan80(int gamePoints){ return gamePoints > 80; }
+    public boolean isGamePointsHigherThan60(int gamePoints){ return gamePoints > 60; }
+    public boolean isGamePointsHigherThan40(int gamePoints){ return gamePoints > 40; }
 }

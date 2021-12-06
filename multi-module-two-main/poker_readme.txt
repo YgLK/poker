@@ -9,6 +9,13 @@
 5. You should run multiple Clients each from another terminal. When all players have set nicknames you can start the game (don't type 'get cards' command before all players has joined).
 Type 'queue' to check when is your turn.
 
+           COMMUNICATION - CLIENT-SERVER
+Server-client communication is implemented with the use of Java IO.
+At the beginning the server waits, listening to the socket for a client
+to make a connection request. When the server code encounters the accept method,
+it blocks until a client makes a connection request to it. If everything goes well, the server accepts the connection.
+Client can communicate with the server by typing commands used for the Poker gameplay (list below).
+Server recognizes typed in commands and process it, result is sent back to the Client.
 
 Five-card draw (Poker) - INSTRUCTIONS
 
@@ -33,3 +40,10 @@ USEFUL COMMANDS:
     'restart' - vote for new game [Phase 5]
                 Good luck!
 
+------------------------------------------------------------------------
+PS. To avoid annoying log information printed during the game you can change printing by LOGGER to printing by System.out
+(WARNING! Approach with System.out is found by the SonarQube as Major Code Smell.).
+To achieve that goal do following steps:
+        In Client.java class (poker-client/src/main/java/pl.edu.agh.kis.pz1/Client.java):
+    1. Comment lines 85, 90, 103
+    2. Uncomment lines 71, 84, 89, 102

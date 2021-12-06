@@ -42,9 +42,12 @@ public class EchoService extends Thread {
         try {
             // initialize needed data
             this.acceptedSocket = acceptedSocket;
+
             is = new BufferedReader(new InputStreamReader(acceptedSocket.getInputStream()));
             os = new DataOutputStream(acceptedSocket.getOutputStream());
+            // get Client printer
             outPrint = new PrintWriter(acceptedSocket.getOutputStream(), true);
+            // get Client scanner
             inScanner = new Scanner(acceptedSocket.getInputStream());
         } catch (IOException e) {
             try {
@@ -66,6 +69,7 @@ public class EchoService extends Thread {
     @Override
     public void run() {
         try (
+                // get
                 PrintWriter out = this.getOutPrintWriter();
                 Scanner in = this.getInScanner()
         ){

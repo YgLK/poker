@@ -68,12 +68,12 @@ public class Client {
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
         // declare outClient for readability
-        PrintStream outClient = System.out;
+        // PrintStream outClient = System.out;
 
         try (
                 // initialize needed data
                 Socket socket = new Socket(HOST, PORT);
-
+                // initialize PrintWriter used for sending message to the server
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 // Server scanner from which data sent to the Client is read
                 Scanner in = new Scanner(socket.getInputStream());
@@ -81,11 +81,13 @@ public class Client {
                 Scanner s = new Scanner(System.in)
         ) {
             out.println(nickname); // pass nickname to the server
-            outClient.println("You've paid Ante. Type 'get cards' to take cards from the table.");
+            //  outClient.println("You've paid Ante. Type 'get cards' to take cards from the table.");
+            LOGGER.info("You've paid Ante. Type 'get cards' to take cards from the table.");
             String input = "";
             while (true) {
                 // get input from Client
-                outClient.print(nickname + " >>  ");
+                //  outClient.print(nickname + " >>  ");
+                LOGGER.info(nickname + " >>  ");
                 // Client enters command
                 input = s.nextLine();
                 // pass input to the server
@@ -97,7 +99,8 @@ public class Client {
 
                 // read message from the server
                 if(in.hasNextLine()) {
-                    outClient.println(in.nextLine());
+                    // outClient.println(in.nextLine());
+                    LOGGER.info(in.nextLine());
                 }
             }
         }
