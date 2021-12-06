@@ -9,15 +9,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Przykładowy kod do zajęć laboratoryjnych 2, 3, 4 z przedmiotu: Programowanie zaawansowane 1
- * @author Paweł Skrzyński
+ * Server class used for Poker Game. Server gathers
+ * clients, provides communication with Players and let them play the
+ * socket-based Poker game.
+ *
+ * @author  Jakub Szpunar
+ * @version 1.0
+ * @since   2021-12-06
  */
 public class Server {
+    /** Announces new logs */
     private static final Logger LOGGER = Logger.getLogger(EchoService.class.getName() );
-    // number of players connected to the server
+    /** Number of players connected to the server */
     protected static int numPlayers = 0;
 
-
+    /**
+     * Main method starts the Server which waits for the clients.
+     */
     public static void main( String[] args ) {
         try {
             startServer();
@@ -26,7 +34,11 @@ public class Server {
         }
     }
 
-    // start the server
+    /**
+     * Server method used for starting the server.
+     * Port on which server will work is declared and
+     * server's socket is opened for mew Clients trying to join the server.
+     */
     public static void startServer() throws IOException {
         // set PORT on which the server will work
         final int PORT = 4040;
@@ -62,4 +74,11 @@ public class Server {
         numPlayers -= 1;
     }
 
+    public static void setNumPlayers(int numPlayers) {
+        Server.numPlayers = numPlayers;
+    }
+
+    public static int getNumPlayers() {
+        return numPlayers;
+    }
 }
