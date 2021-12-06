@@ -1,38 +1,48 @@
 package pl.edu.agh.kis.pz1.util;
 
-
 import java.util.*;
 
-
-
-/*
-gamePhases
-1 - pay Ante & deal cards
-2 - first Bid
-3 - exchange cards
-4 - second Bid
-5 - evaluate Hands and under 'leader' command there will be  winner / restart game
+/**
+ *
+ * Class providing smooth Game Phases transition
+ * when certain conditions are satisfied.
+ *
+ * List of gamePhases:
+ * 1 - pay Ante & get cards
+ * 2 - first Bid
+ * 3 - exchange cards
+ * 4 - second Bid
+ * 5 - evaluate Hands and under 'winner' command there will be  winner / restart game by voting with 'restart' command
 */
 public class Gameplay {
-    // phase of the game
+    /** current phase of the game */
     private static int gamePhase = 1;
-    // set containing Players who've taken cards from the table
+    /** set containing Players who've taken cards from the table */
     private static Set<Player> phase1 = new LinkedHashSet<>();
-    // map containing Players and their Bet values in the second GamePhase
+    /** map containing Players and their Bet values in the second GamePhase */
     private static HashMap<Player, Integer> phase2 = new HashMap<>();
-    // set containing Players who've exchanged their cards in the third GamePhase
+    /** set containing Players who've exchanged their cards in the third GamePhase */
     private static HashSet<Player> phase3 = new HashSet<>();
-    // map containing Players and their Bet values in the fourth GamePhase
+    /** map containing Players and their Bet values in the fourth GamePhase */
     private static HashMap<Player, Integer> phase4 = new HashMap<>();
-    // winner of the game
+    /** winner of the game */
     private static Player winner;
-    // map containing votes from players who declared to restart the game
+    /** map containing votes from players who declared to restart the game */
     private static HashMap<Player, Boolean> restartVotes = new HashMap<>();
 
-
+    /**
+     * Private Constructor to avoid Class instantiation.
+     */
     private Gameplay(){}
 
-    // group players who have taken their cards from the table
+    /**
+     * Method used for grouping players who have taken their cards from the table.
+     * When all players take their cards GamePhase is incremented.
+     * Then second GamePhase comes - it is first Bet phase.
+     *
+     * @param p Add player to the phase1 set when Player
+     *          takes cards from the table ('get cards' command)
+     */
     public static void passPhase1(Player p){
         // add player to the set
         phase1.add(p);
@@ -43,17 +53,33 @@ public class Gameplay {
     }
 
 
-    // pass this phase if all bets are not 0 and equal and
-    // queue has accomplished full cycle
-    // (first player at the beginning of the cycle is the first player)
+    /**
+     * The method provides handling first Bet phase in the game (Second GamePhase).
+     * Second phase is passed when all bets are equal, not 0 and queue has accomplished
+     * full cycle (first player at the beginning of the cycle is the first player).
+     * In simple words when all Players meet in the same bet value.
+     *
+     * To check if all players' Bet values are equal is used HashMap in which
+     * Players and their Bet values are stored.
+     *
+     *  @param p Add player to the phase2 HashMap when Player
+     *          places a Bet
+     */
     public static void passPhase2(Player p){
         // put player and value of his bet to the HashSet
-        phase2.put(p, p.getfirstBid());
+        phase2.put(p, p.getFirstBid());
         checkBetStatus(p, phase2);
     }
 
 
-    // group players who have exchanged their cards
+    /**
+     * Method used for grouping players who have exchanged their cards.
+     * When all players exchange their cards GamePhase is incremented.
+     * Then fourth GamePhase comes - it is second Bet phase.
+     *
+     * @param p Add player to the phase3 set when Player
+     *          takes cards from the table ('get cards' command)
+     */
     public static void passPhase3(Player p){
         phase3.add(p);
         if(phase3.size() == Player.getPlayerCount()){
@@ -61,7 +87,18 @@ public class Gameplay {
         }
     }
 
-
+    /**
+     * The method provides handling second Bet phase in the game (Fourth GamePhase).
+     * Fourth phase is passed when all bets are equal, not 0 and queue has accomplished
+     * full cycle (first player at the beginning of the cycle is the first player).
+     * In simple words when all Players meet in the same bet value.
+     *
+     * To check if all players' Bet values are equal is used HashMap in which
+     * Players and their Bet values are stored.
+     *
+     *  @param p Add player to the phase4 HashMap when Player
+     *          places a Bet
+     */
     public static void passPhase4(Player p){
         // put player and value of his bet to the HashSet
         phase4.put(p, p.getSecondBid());
@@ -69,6 +106,15 @@ public class Gameplay {
     }
 
 
+    /**
+     * Method used for Bet handling.
+     * Checks if queue accomplished full cycle and
+     * all players' bet values are equal (and not 0).
+     *
+     * @param p Player placing bet
+     * @param bets HashMap containing Players with
+     *             their bet values
+     */
     public static void checkBetStatus(Player p, HashMap<Player, Integer> bets){
         ArrayList<Player> pl = new ArrayList<>(phase1);
         Player lastInTheQueue = pl.get(pl.size()-1);
@@ -85,15 +131,12 @@ public class Gameplay {
         }
     }
 
-
-    public static int getGamePhase(){
-        return gamePhase;
-    }
-
-    public static void incrementGamePhase(){
-        gamePhase++;
-    }
-
+    /**
+     * Method which returns text representation with short description
+     * of each gamePhase.
+     *
+     * @return String gamePhase description
+     */
     public static String strGamePhase(){
         String info;
         switch(gamePhase) {
@@ -118,6 +161,12 @@ public class Gameplay {
         return info;
     }
 
+    /**
+     * Method provides picking the winner functionality.
+     * Winner with the highest gamePoints is picked and returned.
+     *
+     * @return winner - Player with the highest gamePoints value
+     */
     public static Player pickWinner(){
         // I can pick winner on the grounds of the list of players from phase1
         Player winner = null;
@@ -130,6 +179,14 @@ public class Gameplay {
             }
         }
         return winner;
+    }
+
+    public static int getGamePhase(){
+        return gamePhase;
+    }
+
+    public static void incrementGamePhase(){
+        gamePhase++;
     }
 
     public static void setWinner(Player p){
@@ -172,6 +229,10 @@ public class Gameplay {
         return restartVotes;
     }
 
+    /**
+     * Method provides clearing Containers during the game,
+     * in the gamePhases and sets gamePhase to 1 (Start).
+     */
     public static void clearGameplayData(){
         setGamePhaseToOne();
         phase1.clear();
