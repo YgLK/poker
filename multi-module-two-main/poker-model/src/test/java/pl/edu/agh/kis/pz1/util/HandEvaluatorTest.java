@@ -7,6 +7,11 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+
+/**
+ * Class used for testing HandEvaluator
+ * methods and functionalities.
+ */
 public class HandEvaluatorTest {
     ArrayList<Card> cards = new ArrayList<>();
 

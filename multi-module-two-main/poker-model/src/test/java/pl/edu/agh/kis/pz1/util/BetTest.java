@@ -5,7 +5,10 @@ import org.junit.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-
+/**
+ * Class used for testing Bet
+ * methods and functionalities.
+ */
 public class BetTest{
     private static final Logger LOGGER = Logger.getLogger(BetTest.class.getName());
     public static ArrayList<Player> players = new ArrayList<>();

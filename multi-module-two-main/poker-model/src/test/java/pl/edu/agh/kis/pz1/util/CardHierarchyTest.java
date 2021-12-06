@@ -2,13 +2,15 @@ package pl.edu.agh.kis.pz1.util;
 
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-
+/**
+ * Class used for testing CardHierarchy
+ * methods and functionalities.
+ */
 public class CardHierarchyTest {
     private static final Logger LOGGER = Logger.getLogger(BetTest.class.getName());
     public static ArrayList<Card> cards = new ArrayList<>();

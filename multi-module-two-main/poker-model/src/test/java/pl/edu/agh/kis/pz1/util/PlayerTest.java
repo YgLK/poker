@@ -8,7 +8,10 @@ import org.junit.Test;
 import java.util.HashSet;
 import java.util.Set;
 
-
+/**
+ * Class used for testing Player
+ * methods and functionalities.
+ */
 public class PlayerTest {
     private static Player player;
 

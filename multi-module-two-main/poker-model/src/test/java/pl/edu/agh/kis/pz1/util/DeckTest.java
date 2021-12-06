@@ -5,6 +5,10 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+/**
+ * Class used for testing Deck
+ * methods and functionalities.
+ */
 public class DeckTest{
 
     // tests need to have better names

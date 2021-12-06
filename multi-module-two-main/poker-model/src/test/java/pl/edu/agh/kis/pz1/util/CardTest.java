@@ -3,6 +3,10 @@ package pl.edu.agh.kis.pz1.util;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Class used for testing Card
+ * methods and functionalities.
+ */
 public class CardTest {
 
     // tests need to have better names

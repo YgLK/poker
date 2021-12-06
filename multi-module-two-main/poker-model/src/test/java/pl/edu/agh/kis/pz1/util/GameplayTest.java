@@ -4,7 +4,10 @@ import org.junit.*;
 
 import java.util.ArrayList;
 
-
+/**
+ * Class used for testing Gameplay
+ * methods and functionalities.
+ */
 public class GameplayTest {
     static ArrayList<Player> players = new ArrayList<>();
 

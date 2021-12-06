@@ -7,7 +7,10 @@ import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 
-
+/**
+ * Class used for testing Client
+ * methods and functionalities.
+ */
 public class ClientTest {
 
     /**
