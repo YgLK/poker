@@ -4,14 +4,28 @@ package pl.edu.agh.kis.pz1.util;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-// class to evaluate score of the cards on the player's hand
+
+/**
+ * Class used for Player's hand evaluation.
+ * Provides methods necessary to sum each Player's
+ * score based on the owned Cards.
+ */
 public class HandEvaluator {
-    // LinkedHashMap to keep the order
+    /** LinkedHashMap used for storing number of occurrences of the Ranks in the Player's hand */
     private static LinkedHashMap<Rank, Integer> rankCounter = new LinkedHashMap<>();
+    /** LinkedHashMap used for storing number of occurrences of the Suits in the Player's hand  */
     private static LinkedHashMap<Suit, Integer> suitCounter = new LinkedHashMap<>();
 
+    /**
+     * Private Constructor to avoid Class instantiation.
+     */
     private HandEvaluator(){}
 
+    /**
+     * Method used for initialization rankCounter and SuitCounter
+     * HashMaps. For each rank and suit number of occurrences
+     * is set to 0 initially.
+     */
     public static void initializeCounters(){
         // initialize rankCounter with 0s
         for(Rank r : Rank.values()){
@@ -23,6 +37,13 @@ public class HandEvaluator {
         }
     }
 
+    /**
+     * Method which groups cards and increment their
+     * number of occurrences in the rankCounter and suitCounter
+     * HashMaps.
+     *
+     * @param cards Player's cards
+     */
     public static void groupCards(ArrayList<Card> cards){
         for(Card c : cards){
             // increment card rank count
@@ -32,6 +53,10 @@ public class HandEvaluator {
         }
     }
 
+    /**
+     * Method used for calculating score
+     * of each Player's based on the owned Cards.
+     */
     public static int evaluateHand(ArrayList<Card> cards){
         // initialize HashMaps with default values
         initializeCounters();
@@ -64,6 +89,13 @@ public class HandEvaluator {
         return pointsHand + getHighestCardPoints();
     }
 
+    /**
+     * Method used for assigning points
+     * for the highest owned Card.
+     *
+     * @return points value corresponding
+     *         to the highest owned card
+     */
     public static int getHighestCardPoints(){
         // add points to the score of the highest Card
         int initPoints = 13;
@@ -81,6 +113,9 @@ public class HandEvaluator {
         return initPoints;
     }
 
+    /**
+     * Clear rankCounter and suitCounter HashMaps.
+     */
     public static void clear(){
         rankCounter.clear();
         suitCounter.clear();
