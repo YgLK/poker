@@ -68,7 +68,7 @@ public class Client {
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
         // declare outClient for readability
-        // PrintStream outClient = System.out;
+        PrintStream outClient = System.out;
 
         try (
                 // initialize needed data
@@ -81,13 +81,11 @@ public class Client {
                 Scanner s = new Scanner(System.in)
         ) {
             out.println(nickname); // pass nickname to the server
-            //  outClient.println("You've paid Ante. Type 'get cards' to take cards from the table.");
-            LOGGER.info("You've paid Ante. Type 'get cards' to take cards from the table.");
+            outClient.println("You've paid Ante. Type 'get cards' to take cards from the table.");
             String input = "";
             while (true) {
                 // get input from Client
-                //  outClient.print(nickname + " >>  ");
-                LOGGER.info(nickname + " >>  ");
+                outClient.print(nickname + " >>  ");
                 // Client enters command
                 input = s.nextLine();
                 // pass input to the server
@@ -99,8 +97,7 @@ public class Client {
 
                 // read message from the server
                 if(in.hasNextLine()) {
-                    // outClient.println(in.nextLine());
-                    LOGGER.info(in.nextLine());
+                    outClient.println(in.nextLine());
                 }
             }
         }
@@ -126,7 +123,6 @@ public class Client {
                "'exchange cards _ _ _' - exchange cards from your hand (cards are numbered 0 to 4) e.g. 'exchange cards 1 3'\n" +
                "'stay' - inform that you don't want exchange any cards in the third phase\n" +
                "'queue' - show players queue\n" +
-               "'balance' - show balance\n" +
                "'bet _value_' - bid the amount of _value_\n" +
                "'bid status' - info about betting phase\n" +
                "'winner' - show winner\n" +
