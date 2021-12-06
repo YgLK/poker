@@ -3,6 +3,7 @@ package pl.edu.agh.kis.pz1.util;
 import java.util.ArrayList;
 import java.util.Collections;
 
+
 /**
  * Class which represents Card Deck
  * consisted of Card class instances.

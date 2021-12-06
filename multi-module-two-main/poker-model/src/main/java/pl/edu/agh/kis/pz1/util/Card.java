@@ -2,6 +2,7 @@ package pl.edu.agh.kis.pz1.util;
 
 import java.util.Objects;
 
+
 /**
  * Class representation of the Card.
  * Each card has defined Suit and Rank.

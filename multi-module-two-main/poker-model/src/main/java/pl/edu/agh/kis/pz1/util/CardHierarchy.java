@@ -5,9 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 
-
-// it might be moved to poker-common
-
 /**
  * Class used for Player's hand estimation.
  * Provides the methods necessary to check which

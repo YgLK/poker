@@ -2,7 +2,6 @@ package pl.edu.agh.kis.pz1.util;
 
 import java.util.ArrayList;
 
-// it might be moved to the poker-common
 
 /**
  * Class used for handling Bets.

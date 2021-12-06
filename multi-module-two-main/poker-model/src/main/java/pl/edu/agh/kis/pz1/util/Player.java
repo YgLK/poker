@@ -3,6 +3,7 @@ package pl.edu.agh.kis.pz1.util;
 
 import java.util.ArrayList;
 
+
 /**
  * Class represents Player in the Poker game.
  */

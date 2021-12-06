@@ -1,5 +1,6 @@
 package pl.edu.agh.kis.pz1.util;
 
+
 /**
  *  Enumeration type representing Cards' Suits types.
  */

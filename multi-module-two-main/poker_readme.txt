@@ -1,3 +1,4 @@
+                                POKER GAME: Five-card draw
     How to run Poker Game
 1. Build the project with Maven.
 2. Find target directory in the poker-server and poker-client module.
