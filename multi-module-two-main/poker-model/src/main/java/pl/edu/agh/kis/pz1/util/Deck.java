@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Class representation of a Deck
- * consisted of Card class instances
- * @version 1.0
- * @author J. Szpunar
+ * Class with represents Card Deck
+ * consisted of Card class instances.
  */
 public class Deck {
     private ArrayList<Card> cards;
 
     /**
-     * Construct a Deck.
-     *
+     * Construct a Deck. Deck contains
+     * 52 Cards - combinations of each Rank with Suits.
      * Cards in the Deck are initially sorted.
      */
     public Deck(){
@@ -27,17 +25,20 @@ public class Deck {
         }
     }
 
-    // get first card from the deck
+    /**
+     * Method which lets to get first card from the Deck
+     *
+     * @return Card
+     */
     public Card getCard(){
         Card c = cards.get(0);
         cards.remove(0);
         return c;
     }
 
-    public ArrayList<Card> getCards() {
-        return cards;
-    }
-
+    /**
+     * Method which makes Deck sorted as initially order.
+     */
     public void factory(){
         // sort the deck
         cards.clear();
@@ -48,9 +49,30 @@ public class Deck {
         }
     }
 
+    /**
+     * Method shuffles the Deck. Cards are
+     * no longer in the initial order.
+     */
     public void shuffle(){
         // shuffle the deck
         Collections.shuffle(cards);
+    }
+
+    /**
+     * Method provides text representation of the Cards in the Deck.
+     *
+     * @return String representing Deck
+     */
+    public String toString(){
+        StringBuilder strDeck = new StringBuilder();
+        for (Card c : cards) {
+            strDeck.append("[").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("]");
+        }
+        return strDeck.toString();
+    }
+
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 
     public void removeCard(int idx){
@@ -60,13 +82,4 @@ public class Deck {
     public void addCard(Card c){
         cards.add(c);
     }
-
-    public String toString(){
-        StringBuilder strDeck = new StringBuilder();
-        for (Card c : cards) {
-            strDeck.append("[").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("]");
-        }
-        return strDeck.toString();
-    }
-
 }
