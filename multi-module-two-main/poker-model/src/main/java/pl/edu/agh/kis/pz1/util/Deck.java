@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Class with represents Card Deck
+ * Class which represents Card Deck
  * consisted of Card class instances.
  */
 public class Deck {

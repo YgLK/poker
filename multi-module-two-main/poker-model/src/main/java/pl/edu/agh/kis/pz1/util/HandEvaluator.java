@@ -56,6 +56,9 @@ public class HandEvaluator {
     /**
      * Method used for calculating score
      * of each Player's based on the owned Cards.
+     *
+     * @param cards Cards in the player's hand
+     * @return Based on cards game points
      */
     public static int evaluateHand(ArrayList<Card> cards){
         // initialize HashMaps with default values

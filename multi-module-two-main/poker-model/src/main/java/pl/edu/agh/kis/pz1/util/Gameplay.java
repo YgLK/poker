@@ -8,7 +8,7 @@ import java.util.*;
  * when certain conditions are satisfied.
  *
  * List of gamePhases:
- * 1 - pay Ante & get cards
+ * 1 - pay Ante and get cards
  * 2 - first Bid
  * 3 - exchange cards
  * 4 - second Bid
