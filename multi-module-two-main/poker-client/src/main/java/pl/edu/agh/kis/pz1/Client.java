@@ -67,13 +67,17 @@ public class Client {
         // set hostname and port to which client will be joining
         final String HOST = "127.0.0.1";
         final int PORT = 4040;
+        // declare outClient for readability
         PrintStream outClient = System.out;
 
         try (
                 // initialize needed data
                 Socket socket = new Socket(HOST, PORT);
+
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+                // Server scanner from which data sent to the Client is read
                 Scanner in = new Scanner(socket.getInputStream());
+                // Client scanner with which Client can enter used commands
                 Scanner s = new Scanner(System.in)
         ) {
             out.println(nickname); // pass nickname to the server
@@ -82,13 +86,16 @@ public class Client {
             while (true) {
                 // get input from Client
                 outClient.print(nickname + " >>  ");
+                // Client enters command
                 input = s.nextLine();
                 // pass input to the server
                 out.println(input);
+                // exit server if client sent "exit" message
                 if (input.equalsIgnoreCase("exit")){
                     break;
                 }
 
+                // read message from the server
                 if(in.hasNextLine()) {
                     outClient.println(in.nextLine());
                 }
