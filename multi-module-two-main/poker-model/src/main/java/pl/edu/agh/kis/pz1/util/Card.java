@@ -3,23 +3,24 @@ package pl.edu.agh.kis.pz1.util;
 import java.util.Objects;
 
 /**
- * Class representation of a Card
- * @version 1.0
- * @author J. Szpunar
+ * Class representation of the Card.
+ * Each card has defined Suit and Rank.
  */
 public class Card {
     private Suit cardSuit;
     private Rank cardRank;
 
     /**
-     * Construct a Card.
+     * Card constructor.
+     * Card Suit and Rank need to be passed
+     * while creating new Card.
      *
      * @param suit
      *          suit of the card
      * @param rank
      *          rank of the card
      */
-    Card(Suit suit, Rank rank){
+    public Card(Suit suit, Rank rank){
         cardSuit = suit;
         cardRank = rank;
     }
@@ -44,14 +45,16 @@ public class Card {
         return " [" + this.getCardRank() + " " + this.getCardSuit() + "] ";
     }
 
-    public boolean isCardSuitEqual(Suit suit){
-        return this.getCardSuit() == suit;
-    }
-
-    public boolean isCardRankEqual(Rank rank){
-        return this.getCardRank() == rank;
-    }
-
+    /**
+     * Overridden equals method
+     * used for Cards comparison.
+     * Method checks if cards are the same.
+     *
+     * @param o Input Card
+     *
+     * @return true if cards are equal
+     *         else false
+     */
     @Override
     public boolean equals(Object o){
         if (this == o) return true;
@@ -60,6 +63,12 @@ public class Card {
         return cardSuit == card.cardSuit &&  cardRank == card.cardRank;
     }
 
+    /**
+     * Overridden hashCode method used
+     * for creating unique hash for the object.
+     *
+     * @return unique hash corresponding to Card
+     */
     @Override
     public int hashCode(){
         return Objects.hash(cardSuit, cardRank);
