@@ -25,6 +25,8 @@ public class Server {
 
     /**
      * Main method starts the Server which waits for the clients.
+     *
+     * @param args Command-Line Arguments
      */
     public static void main( String[] args ) {
         try {
@@ -38,6 +40,8 @@ public class Server {
      * Server method used for starting the server.
      * Port on which server will work is declared and
      * server's socket is opened for mew Clients trying to join the server.
+     *
+     * @throws IOException
      */
     public static void startServer() throws IOException {
         // set PORT on which the server will work

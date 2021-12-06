@@ -16,7 +16,7 @@ public class TextUtils {
 
     /**
      * Private Constructor to avoid
-     * instantiation of this Class
+     * Class instantiation.
      */
     private TextUtils(){}
 

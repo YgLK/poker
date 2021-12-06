@@ -2,6 +2,7 @@ package pl.edu.agh.kis.pz1;
 
 import org.apache.commons.lang3.Validate;
 import pl.edu.agh.kis.pz1.util.Bet;
+import pl.edu.agh.kis.pz1.util.Card;
 import pl.edu.agh.kis.pz1.util.Gameplay;
 import pl.edu.agh.kis.pz1.util.Player;
 
@@ -293,8 +294,18 @@ public class EchoService extends Thread {
              if(Gameplay.getWinner() == null){
                  out.println("Winner hasn't been established yet.");
              } else {
-                 out.println("The winner -> " + Gameplay.getWinner().getNickname() + " with " + Gameplay.getWinner().getGamePoints() + " points!");
+                 out.println("The winner is... " + Gameplay.getWinner().getNickname() + " with " + Gameplay.getWinner().getStringHandCombination() + "!");
              }
+        } else if(input.toLowerCase().contains("won cards")){
+            if(Gameplay.getWinner() == null){
+                out.println("Winner hasn't been established yet.");
+            } else {
+                StringBuilder winCards = new StringBuilder("The winner cards: ");
+                for (Card c : Gameplay.getWinner().getCards()) {
+                    winCards.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
+                }
+                out.println(winCards);
+            }
         } else {
             // if not just print return what client typed as unknown command
             out.println("Unknown command '" + input + "' OR you're in the wrong game phase to use it.");
@@ -306,6 +317,8 @@ public class EchoService extends Thread {
      * the current game phase bet.
      *
      * Used in the second or fourth game phase (bet phases).
+     *
+     * @return max value of bet
      */
     public int getMaxBet(){
         if(Gameplay.getGamePhase() == 2){
@@ -319,6 +332,8 @@ public class EchoService extends Thread {
 
     /**
      * Method returning text representation of the queue.
+     *
+     * @return String representation of the queue
      */
     public String strGetQueue(){
         // communicate that it's your turn
@@ -332,6 +347,8 @@ public class EchoService extends Thread {
 
     /**
      * Method returning text representation of the Hand evaluation points.
+     *
+     * @return String with player's game points
      */
     public String strGetHandValue(){
         return ClientIdentifiers.getPlayers().get(this).getNickname() + " points: "
@@ -360,8 +377,11 @@ public class EchoService extends Thread {
     }
 
     /**
-     * Method used to exchange Player's, corresponding to Client, cards.
+     * Method used to exchange Player's (corresponding to Client) cards.
      * Used in the third game phase (exchange phase).
+     *
+     * @param input String containing Client's sent command
+     * @param out PrintWriter which will print the result
      *
      * @return true if success
      *         else false

@@ -33,18 +33,27 @@ public class ClientIdentifiers {
         return pl;
     }
 
-    /** add client to the players */
+    /**
+     * add client to the players
+     * @param es
+     * @param pl
+     * */
     public static void addClient(EchoService es, Player pl) {
         ClientIdentifiers.players.put(es, pl);
     }
 
-    /** remove client from the players */
+    /**
+     * remove client from the players
+     * @param es
+     */
     public static void removeClient(EchoService es) {
         ClientIdentifiers.players.remove(es);
     }
 
     /**
      * Method used to get String with information about current clients
+     *
+     * @return String with player list
      */
     public static String playersListToStr(){
         StringBuilder str = new StringBuilder("Players [" + Server.numPlayers + "]: ");

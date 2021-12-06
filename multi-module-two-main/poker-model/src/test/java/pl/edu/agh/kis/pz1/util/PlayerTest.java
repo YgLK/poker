@@ -27,7 +27,7 @@ public class PlayerTest {
         Assert.assertTrue("Created Player doesn't have all properties cleared.",
                 player.getNickname().equals("test player") &&
                         player.getGamePoints() == 0 &&
-                        player.getfirstBid() == 0 &&
+                        player.getFirstBid() == 0 &&
                         player.getSecondBid() == 0 &&
                         player.getMoney() == 100 &&
                         player.getCards().size() == 0
@@ -82,7 +82,7 @@ public class PlayerTest {
         player.dealCards();
         String cardsToString = player.yourCardsToString();
 
-        // count brackets
+        // count brackets - counter checks balance between bracket [ and ]
         int counter = 0;
         for (char ch : cardsToString.toCharArray()){
             if (ch == '[') counter++;
@@ -169,6 +169,21 @@ public class PlayerTest {
         Assert.assertEquals("player count should increment after creating new Player",
                 beforeIncrementation + 1,
                 Player.getPlayerCount());
+    }
+
+    @Test
+    public void testGetStringHandCombination(){
+        player.clearPlayerData();
+        player.getCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
+        player.getCards().add(new Card(Suit.DIAMONDS, Rank.KING));
+        player.getCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
+        player.getCards().add(new Card(Suit.DIAMONDS, Rank.JACK));
+        player.getCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+
+        player.evaluatePlayerHand();
+
+        Assert.assertEquals("Royal Flush",
+                player.getStringHandCombination());
     }
 
 }

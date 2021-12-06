@@ -120,6 +120,30 @@ public class Player {
         money -= 5;
     }
 
+    public String getStringHandCombination(){
+        if(gamePoints > 200){
+            return "Royal Flush";
+        } else if(gamePoints > 180){
+            return "Straight Flush";
+        } else if(gamePoints > 160){
+            return "Four Of Kind";
+        } else if(gamePoints > 140){
+            return "Full House";
+        } else if(gamePoints > 120){
+            return "Flush";
+        } else if(gamePoints > 100){
+            return "Straight";
+        } else if(gamePoints > 80){
+            return "Three Of Kind";
+        } else if(gamePoints > 60){
+            return "Two Pairs";
+        } else if(gamePoints > 40){
+            return "One Pair";
+        } else {
+            return "The highest card";
+        }
+    }
+
     public void evaluatePlayerHand(){
         gamePoints = HandEvaluator.evaluateHand(cards);
     }

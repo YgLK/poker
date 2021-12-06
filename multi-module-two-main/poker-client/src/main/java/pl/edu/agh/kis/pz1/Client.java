@@ -25,6 +25,7 @@ public class Client {
       * Main method creates new Client
       * which joins the running server
       *
+      * @param args
       */
     public static void main( String[] args ) {
         Client client1 = new Client();
@@ -119,6 +120,7 @@ public class Client {
                "'bet _value_' - bid the amount of _value_\n" +
                "'bid status' - info about betting phase\n" +
                "'winner' - show winner\n" +
+               "'won cards' - show winner's cards\n" +
                "'phase' - get current phase of the game \n" +
                "    Good luck!   \n";
     }

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 
 /**
- * Additional class used for
+ * Test class used for checking
  * generating hash from given text
  *
  **/
