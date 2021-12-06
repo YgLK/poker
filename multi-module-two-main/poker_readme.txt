@@ -1,11 +1,12 @@
     How to run Poker Game
 1. Build the project with Maven.
 2. Find target directory in the poker-server and poker-client module.
-2. Run the Server from your terminal after moving to the target directory in the poker-server module by entering this command:
+3. Run the Server from your terminal after moving to the target directory in the poker-server module by entering this command:
     java -jar .\poker-server-1.0-jar-with-dependencies.jar
-2. Run the Client from another terminal after moving to the target directory in the poker-client module by entering this command:
+4. Run the Client from another terminal after moving to the target directory in the poker-client module by entering this command:
     java -jar .\poker-client-1.0-jar-with-dependencies.jar
-You can run multiple Clients (from multiple terminals).
+5. You should run multiple Clients each from another terminal. When all players have set nicknames you can start the game (don't type 'get cards' command before all players has joined).
+Type 'queue' to check when is your turn.
 
 
 Five-card draw (Poker) - INSTRUCTIONS
