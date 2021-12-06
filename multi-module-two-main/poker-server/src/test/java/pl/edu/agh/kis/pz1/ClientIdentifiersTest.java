@@ -7,6 +7,10 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Class used for testing ClientIdentifier
+ * methods and functionalities.
+ */
 public class ClientIdentifiersTest{
     static ArrayList<Player> players = new ArrayList<>();
 
@@ -33,6 +37,11 @@ public class ClientIdentifiersTest{
         }
     }
 
+    @AfterClass
+    public static void clearData(){
+        PlayerQueue.getQueue().clear();
+        ClientIdentifiers.getPlayers().clear();
+    }
 
     @Test
     public void testGetPlayersSizeEqualsPlayerCount() {

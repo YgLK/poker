@@ -46,4 +46,8 @@ public class PlayerQueue {
     public static Deque<EchoService> getQueue() {
         return queue;
     }
+
+    public static void setQueue(Deque<EchoService> queue) {
+        PlayerQueue.queue = queue;
+    }
 }

@@ -4,11 +4,18 @@ import org.junit.*;
 import pl.edu.agh.kis.pz1.util.Player;
 
 import java.net.Socket;
+import java.util.LinkedList;
 
+
+/**
+ * Class used for testing PlayerQueue
+ * methods and functionalities.
+ */
 public class PlayerQueueTest {
 
-    @BeforeClass
-    public static void init(){
+    @Before
+    public void init(){
+        PlayerQueue.setQueue(new LinkedList<>());
         // create EchoServices
         EchoService pl1 = new EchoService(new Socket());
         EchoService pl2 = new EchoService(new Socket());
@@ -28,6 +35,21 @@ public class PlayerQueueTest {
         ClientIdentifiers.getPlayers().put(pl4, new Player("fourth"));
     }
 
+    @AfterClass
+    public static void clearData(){
+        PlayerQueue.getQueue().clear();
+        ClientIdentifiers.getPlayers().clear();
+    }
+
+    @Test
+    public void testFirstBecomeLastPlayer() {
+        EchoService firstInQ = PlayerQueue.getQueue().getFirst();
+        PlayerQueue.nextPlayer();
+
+        Assert.assertEquals("First in the queue should become the last one.",
+                firstInQ,
+                PlayerQueue.getQueue().getLast());
+    }
 
     @Test
     public void testStrQueue() {
@@ -50,13 +72,5 @@ public class PlayerQueueTest {
         );
     }
 
-    @Test
-    public void testFirstBecomeLastPlayer() {
-        EchoService firstInQ = PlayerQueue.getQueue().getFirst();
-        PlayerQueue.nextPlayer();
 
-        Assert.assertEquals("First in the queue should become the last one.",
-                firstInQ,
-                PlayerQueue.getQueue().getLast());
-    }
 }
