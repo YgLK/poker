@@ -3,7 +3,9 @@ package pl.edu.agh.kis.pz1.util;
 
 import java.util.ArrayList;
 
-
+/**
+ * Class represents Player in the Poker game.
+ */
 public class Player {
     static int playerCount = 0;
     static Deck pokerDeck = new Deck();
@@ -14,7 +16,12 @@ public class Player {
     int firstBid;
     int secondBid;
 
-
+    /**
+     * Player constructor which takes Player's nickname as parameter.
+     * Player's fields are initialized.
+     *
+     * @param nick Player's nickname
+     */
     public Player(String nick){
         nickname = nick;
         money = 100;
@@ -24,7 +31,10 @@ public class Player {
         incrementPlayerCount();
     }
 
-
+    /**
+     * Method used in the first GamePhase for dealing cards at the beginning of the game.
+     * Dealt cards are in the Player's hand (cards ArrayList).
+     */
     public void dealCards(){
         pokerDeck.shuffle();
         if(!cards.isEmpty()){
@@ -35,6 +45,13 @@ public class Player {
         }
     }
 
+    /**
+     * The method used for exchanging cards
+     * in the third GamePhase.
+     *
+     * @param cardStr Player's cards
+     * @return Cards exchange method response
+     */
     public String exchangeCards(String cardStr){
         if(cards.isEmpty()){
             return "You cannot exchange cards because you don't have any.";
@@ -42,8 +59,6 @@ public class Player {
             return "You didn't exchange any cards.";
         }
         String[] cardsIdxs = cardStr.split(" ");
-        // TODO: check if idxes are in the 0-4 interval (0-4 idx)
-        // TODO: check if there are only int in the String
         StringBuilder announce = new StringBuilder("You exchanged: ");
         for(String c : cardsIdxs){
             int idx = Integer.parseInt(c);
@@ -57,6 +72,11 @@ public class Player {
         return announce.toString();
     }
 
+    /**
+     * The method produces text representation of the Player's cards.
+     *
+     * @return String cards representation
+     */
     public String yourCardsToString(){
         StringBuilder str = new StringBuilder("Your cards: ");
         for (Card c : cards) {
@@ -65,6 +85,13 @@ public class Player {
         return str.toString();
     }
 
+
+    /**
+     * Method sets Player's actual Bid value
+     * according to the actual GamePhase.
+     *
+     * @param value Bid value
+     */
     public void setBid(int value){
         if(Gameplay.getGamePhase() == 2){
             firstBid = value;
@@ -73,6 +100,12 @@ public class Player {
         }
     }
 
+    /**
+     * Method used for erasing
+     * all the data corresponding to the Player.
+     *
+     * Fields values become as the initial ones.
+     */
     public void clearPlayerData(){
         pokerDeck.factory();
         cards.clear();
@@ -93,6 +126,10 @@ public class Player {
 
     public ArrayList<Card> getCards() {
         return cards;
+    }
+
+    public void setCards(ArrayList<Card> cards) {
+        this.cards = cards;
     }
 
     public int getMoney(){
@@ -131,10 +168,6 @@ public class Player {
 
     public int getSecondBid(){
         return secondBid;
-    }
-
-    public int getfirstBid(){
-        return firstBid;
     }
 
 }
