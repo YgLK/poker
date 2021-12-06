@@ -8,16 +8,25 @@ import java.util.Scanner;
 import java.util.logging.Logger;
 
 
-/**
- * Przykładowy kod do zajęć laboratoryjnych 2, 3, 4 z przedmiotu: Programowanie zaawansowane 1
- * @author Paweł Skrzyński
+ /**
+ * Client class used for Poker Game. Client connects
+ * with the Server and lets Player join the
+ * multi-player socket-based Poker game.
+ *
+ * @author  Jakub Szpunar
+ * @version 1.0
+ * @since   2021-12-06
  */
 public class Client {
     private static final Logger LOGGER = Logger.getLogger(Client.class.getName());
     String nickname;
 
+     /**
+      * Main method creates new Client
+      * which joins the running server
+      *
+      */
     public static void main( String[] args ) {
-
         Client client1 = new Client();
         try {
             client1.joinServer();
@@ -26,6 +35,12 @@ public class Client {
         }
     }
 
+     /**
+      * Client constructor. User enter his nickname
+      * which will be used for the identification
+      * during the game.
+      *
+      */
     Client(){
         // set nickname
         LOGGER.info(getInstructions());
@@ -34,6 +49,19 @@ public class Client {
         nickname = sc.nextLine();
     }
 
+
+     /**
+      * The method is used for connecting to the Server
+      * and further communication with data exchange.
+      * In this method Scanners, PrintWriter and Socket are initialized.
+      *
+      * Server hostname and PORT are defined in the method.
+      * HOST = "127.0.0.1"
+      * PORT = 4040
+      *
+      * @throws IOException If connection or initialization
+      *                     exception occurred.
+      */
     public void joinServer() throws IOException {
         // set hostname and port to which client will be joining
         final String HOST = "127.0.0.1";
@@ -67,6 +95,13 @@ public class Client {
         }
     }
 
+     /**
+      * The method returns String  which contains
+      * GAMEPLAN including all game phases description
+      * USEFUL COMMANDS including commands with their usage and explanation.
+      *
+      * @return String
+      */
    public static String getInstructions(){
        return "\nFive-card draw (Poker) INSTRUCTIONS\n" +
                "    GAMEPLAN:\n" +
