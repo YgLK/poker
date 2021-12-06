@@ -297,18 +297,28 @@ public class EchoService extends Thread {
                  out.println("The winner is... " + Gameplay.getWinner().getNickname() + " with " + Gameplay.getWinner().getStringHandCombination() + "!");
              }
         } else if(input.toLowerCase().contains("won cards")){
-            if(Gameplay.getWinner() == null){
-                out.println("Winner hasn't been established yet.");
-            } else {
-                StringBuilder winCards = new StringBuilder("The winner cards: ");
-                for (Card c : Gameplay.getWinner().getCards()) {
-                    winCards.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
-                }
-                out.println(winCards);
-            }
+            printWonCards(out);
         } else {
             // if not just print return what client typed as unknown command
             out.println("Unknown command '" + input + "' OR you're in the wrong game phase to use it.");
+        }
+    }
+
+
+    /**
+     * Method for printing Winner Cards
+     *
+     * @param out PrintWriter used to print information
+     */
+    public static void printWonCards(PrintWriter out){
+        if(Gameplay.getWinner() == null){
+            out.println("Winner hasn't been established yet.");
+        } else {
+            StringBuilder winCards = new StringBuilder("The winner cards: ");
+            for (Card c : Gameplay.getWinner().getCards()) {
+                winCards.append(" [").append(c.getCardRank()).append(" ").append(c.getCardSuit()).append("] ");
+            }
+            out.println(winCards);
         }
     }
 

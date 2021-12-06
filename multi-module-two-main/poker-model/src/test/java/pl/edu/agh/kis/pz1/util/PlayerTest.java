@@ -154,7 +154,7 @@ public class PlayerTest {
 
         player.evaluatePlayerHand();
 
-        Assert.assertEquals("Player Gamepoints should be equal to: 160 (FourOfKind) + 13 (ACE is the highest) = 173",
+        Assert.assertEquals("Player GamePoints should be equal to: 160 (FourOfKind) + 13 (ACE is the highest) = 173",
                 173,
                 player.getGamePoints());
     }
@@ -166,7 +166,7 @@ public class PlayerTest {
         // create new Player to increment Player Count
         new Player("");
 
-        Assert.assertEquals("player count should increment after creating new Player",
+        Assert.assertEquals("Player count should increment after creating new Player",
                 beforeIncrementation + 1,
                 Player.getPlayerCount());
     }
@@ -174,15 +174,15 @@ public class PlayerTest {
     @Test
     public void testGetStringHandCombination(){
         player.clearPlayerData();
-        player.getCards().add(new Card(Suit.DIAMONDS, Rank.ACE));
+        player.getCards().add(new Card(Suit.HEARTS, Rank.EIGHT));
         player.getCards().add(new Card(Suit.DIAMONDS, Rank.KING));
-        player.getCards().add(new Card(Suit.DIAMONDS, Rank.QUEEN));
-        player.getCards().add(new Card(Suit.DIAMONDS, Rank.JACK));
-        player.getCards().add(new Card(Suit.DIAMONDS, Rank.TEN));
+        player.getCards().add(new Card(Suit.CLUBS, Rank.TWO));
+        player.getCards().add(new Card(Suit.HEARTS, Rank.JACK));
+        player.getCards().add(new Card(Suit.SPADES, Rank.THREE));
 
         player.evaluatePlayerHand();
 
-        Assert.assertEquals("Royal Flush",
+        Assert.assertEquals("The highest card",
                 player.getStringHandCombination());
     }
 
