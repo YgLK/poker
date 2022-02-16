@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>poker-server</artifactId>
-  <name>Pierwszy modul wykonywalny aplikacji - klasa Main1 z metoda main</name>
+  <name>Poker server module with main method.</name>
 
   <!-- Dodane przez pskrzynski -->
   <properties>
@@ -36,7 +36,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>pl.edu.agh.kis.pz1.Main1</mainClass>
+              <mainClass>pl.edu.agh.kis.pz1.Server</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -61,9 +61,9 @@
         </executions>
       </plugin>
     </plugins>
-  </build> 
+  </build>
 
-  <!-- najświeższa wersja w otwartym repo maven to 4.13.2 -->
+  <!-- the newest version from opened maven repo is 4.13.2 -->
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
@@ -83,9 +83,38 @@
       <artifactId>poker-common</artifactId>
       <version>${project.version}</version>
     </dependency>
-
-
   </dependencies>
 
+  <profiles>
+    <profile>
+      <id>attributed</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>jacoco-initialize</id>
+                <goals>
+                  <goal>prepare-agent</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>jacoco-site</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>report</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>
