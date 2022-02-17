@@ -83,7 +83,7 @@ Server recognizes typed in commands and process it, result is sent back to the C
     `restart` - vote for new game *[Phase 5]*
 
 ## Javadoc & SonarQube raport <a name="doc_scube"></a>
- In order to explore `Javadoc` or `SonarQube raport` download appropriately `javadoc` or `sonar-cube` folder,<br> open them and for:
+ In order to explore `Javadoc` or `SonarQube raport` download appropriately `javadoc` or `sonar-cube` directory,<br> open them and for:
  > `Javadoc`: open [allclasses.html](https://github.com/YgLK/poker/blob/dev/javadoc/allclasses.html) file <br> Then the project documentation will appear.
  
  or 
