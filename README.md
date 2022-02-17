@@ -2,7 +2,7 @@
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 [![Generic badge](https://img.shields.io/badge/MAVEN-3.8.1-<COLOR>.svg)](https://shields.io/)
-[![Generic badge](https://img.shields.io/badge/coverage-65-yellow.svg)](https://shields.io/)
+[![Generic badge](https://img.shields.io/badge/coverage-65/100-yellow.svg)](https://shields.io/)
 
 ## Table of Contents
 
